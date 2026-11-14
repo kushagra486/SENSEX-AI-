@@ -14,7 +14,7 @@ from sensex.config import ROOT, load_channel, load_tools
 from sensex.script.package import ScriptPackage, budget, check
 from sensex.script import assemble as script_assemble
 from sensex.script import series as script_series
-from sensex.script.render import render
+from sensex.script.render import episode_prompt, render
 from sensex import site as site_builder
 from sensex.generate import huggingface
 from sensex.generate import kaggle as kaggle_runner
@@ -219,6 +219,14 @@ def run_kaggle_collect(args: argparse.Namespace) -> int:
     return 1 if failed else 0
 
 
+def run_prompt(args: argparse.Namespace) -> int:
+    package = _load_package(args.package)
+    if package is None:
+        return 1
+    print(episode_prompt(package))
+    return 0
+
+
 def run_site(args: argparse.Namespace) -> int:
     path = site_builder.build()
     print(f"Wrote {path.relative_to(ROOT)}")
@@ -311,6 +319,10 @@ def main() -> int:
     k_collect = kaggle_commands.add_parser("collect", help="Download the clips once the run finishes.")
     k_collect.add_argument("folder", type=Path)
     k_collect.set_defaults(run=run_kaggle_collect)
+
+    prompt = commands.add_parser("prompt", help="Print one prompt holding a whole episode.")
+    prompt.add_argument("package", type=Path)
+    prompt.set_defaults(run=run_prompt)
 
     site = commands.add_parser("site", help="Build the web view of scripts, series and trends.")
     site.set_defaults(run=run_site)

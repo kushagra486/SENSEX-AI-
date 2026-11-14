@@ -4,6 +4,54 @@
 
 **Format:** series episode · **Platform:** YouTube Shorts and Instagram Reels · **Aspect:** 9:16 · **Runtime:** 1:02 (12 shots)
 
+## Whole-episode prompt
+
+Everything in one prompt, for a tool that makes a whole video from a single description. Tools that make one short clip at a time need the per-shot prompts further down instead.
+
+```text
+Create one 1:02 video in 9:16 format: "Rainmaker, Ep 1: Attempt 41".
+
+STORY: In 2099 Rajasthan, where a company sells every drop of water, a 13-year-old girl builds a machine from scrap that makes it rain, and the company notices.
+
+This is episode 1 of the series "Rainmaker". It must end on this cliffhanger: Company tanker drones turn toward the village while Tara refuses to hide the machine.
+
+LOOK (identical in every shot): Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air.
+
+CHARACTERS (each must look exactly the same in every shot they appear in):
+
+- Tara, a 13-year-old Indian girl with two short messy braids, a smudge of dust on her cheek, sharp curious eyes, wearing a patched indigo kurta, an orange scarf around her neck and welding goggles pushed up on her forehead. Role: protagonist. Personality: Blunt, fearless, counts her failures, loves her grandfather more than she says. Voice: Clear, quick young girl's voice with dry humour.
+
+- Dadu, a 70-year-old Indian man with a white beard, a faded red Rajasthani turban, deep wrinkles, wearing a cream cotton kurta and a brass token on a cord around his neck. Role: guardian. Personality: Gentle, proud, has learned to survive by keeping his head down. Voice: Soft, gravelly old man's voice.
+
+SHOTS, in order (12 shots; keep each to its exact length):
+
+1. [0:00-0:03, 3s] Extreme close-up of a single drop of water falling onto cracked dry earth, and a dozen dusty hands reaching in from every side to touch the wet spot. Slow motion, top-down view. Sound: One drop landing, a crowd gasping. On-screen caption: "2099. One drop of water costs a day's work." Transition into this shot: cold open.
+
+2. [0:03-0:08, 5s] Early morning. Dadu stands at the front of a long queue of villagers and holds his brass token up to a tall metal water-ration machine; a light on the machine turns red and he lowers his head. Medium shot from the side. Voiceover (not lip-synced): Tara: My grandfather has queued for water every morning of my life. Sound: A harsh electronic buzz. Transition into this shot: cut.
+
+3. [0:08-0:13, 5s] A rooftop workshop cluttered with scrap metal. Tara solders a wire onto a waist-high homemade machine of brass pipes, copper coils and a small upturned satellite dish, wired to old car batteries, sparks lighting her face. Close-up, slow push-in. Voiceover (not lip-synced): Tara: I got tired of watching him beg a machine. So I built my own. Sound: Soldering crackle, wind. Transition into this shot: cut.
+
+4. [0:13-0:21, 8s] A rooftop workshop cluttered with scrap metal. Dadu climbs onto the roof and stares at a waist-high homemade machine of brass pipes, copper coils and a small upturned satellite dish, wired to old car batteries. He says, frightened: "Tara, the company jails people for stealing water." Tara keeps working without looking up and answers calmly: "I'm not stealing it, Dadu. I'm making it." Medium two-shot. Spoken on screen, lips in sync: Dadu: Tara, the company jails people for stealing water. / Tara: I'm not stealing it, Dadu. I'm making it. Transition into this shot: cut.
+
+5. [0:21-0:25, 4s] A rooftop workshop. Tara pulls her welding goggles down over her eyes and throws a heavy iron lever with both hands; a blue electric arc jumps across copper coils beside her. Low angle. Sound: A deep rising hum. On-screen caption: "Attempt 41" Transition into this shot: cut.
+
+6. [0:25-0:30, 5s] A rooftop. The upturned dish of a waist-high homemade machine of brass pipes, copper coils and a small upturned satellite dish, wired to old car batteries fires a thin beam of pale blue light straight up into a cloudless white-hot sky, dust spiralling around it. Wide shot looking up from the roof. Sound: The hum peaks, then cuts out. Transition into this shot: cut.
+
+7. [0:30-0:34, 4s] A rooftop. Tara stares up at an empty sky, then slowly pushes her goggles back onto her forehead as her shoulders drop. Close-up on her face. Voiceover (not lip-synced): Tara: Forty failures. I knew what an empty sky looked like. Sound: Silence, a faint wind. Transition into this shot: cut.
+
+8. [0:34-0:39, 5s] A single dark cloud blooms in the empty sky and spreads fast over the village, its shadow sliding across sandstone rooftops and rusted solar panels. Wide aerial shot. Sound: Low thunder rolling in. Transition into this shot: cut.
+
+9. [0:39-0:44, 5s] A narrow village lane, sudden grey light. Dadu holds out his open palm as the first heavy raindrops hit it, then lifts his face to the sky, eyes wet. Close-up on his hand, tilting up to his face. Sound: The first raindrops on dust. Transition into this shot: cut.
+
+10. [0:44-0:49, 5s] Heavy rain pouring. Tara stands on the rooftop laughing with her arms spread wide, soaked, while villagers dance in the flooded lane below. Low angle with the crowd behind her. Voiceover (not lip-synced): Tara: For three minutes, it was the best day our village ever had. Sound: Rain, cheering, a dhol drum starting. Transition into this shot: cut.
+
+11. [0:49-0:54, 5s] Heavy rain. On the horizon three huge black tanker drones with red warning lights turn in the air and fly toward the village through the downpour. Long-lens shot from a rooftop, raindrops on the lens. Sound: Cheering fades under a mechanical drone. On-screen caption: "The company owns the rain." Transition into this shot: cut.
+
+12. [0:54-1:02, 8s] Heavy rain on a rooftop. Dadu grips the shoulders of Tara and shouts over the storm: "They saw the cloud. Hide the machine. Now!" She does not move; she is staring past him at red lights approaching in the sky. Close two-shot, handheld. Spoken on screen, lips in sync: Dadu: They saw the cloud. Hide the machine. Now! Sound: Thunder, drone engines closing in. On-screen caption: "Episode 2 tomorrow" Transition into this shot: hard cut to black.
+
+EDITING: Cut on action with no fades unless a shot says otherwise. Captions are bold white with a black outline in the upper third, shown for the whole shot they belong to; add no other text, logos or watermarks. Keep colour, lighting and character looks continuous from shot to shot. Voices sit above music and sound effects. End on the last shot's image, then cut to black.
+```
+
 ## Why this video
 
 - Trend: A 'world after' science-fiction short was the biggest English-language hit in this week's scan (3.0M views), from a single video

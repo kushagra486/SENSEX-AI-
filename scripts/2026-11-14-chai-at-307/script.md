@@ -4,6 +4,44 @@
 
 **Format:** series episode · **Platform:** YouTube Shorts and Instagram Reels · **Aspect:** 9:16 · **Runtime:** 0:47 (7 shots)
 
+## Whole-episode prompt
+
+Everything in one prompt, for a tool that makes a whole video from a single description. Tools that make one short clip at a time need the per-shot prompts further down instead.
+
+```text
+Create one 0:47 video in 9:16 format: "Chai at 3:07, Ep 1: The Stall That Wasn't There".
+
+STORY: A tea stall appears on a mountain highway at 3:07 every night. Everyone who stops there is about to die on the road, and tonight it's Kabir's turn.
+
+This is episode 1 of the series "Chai at 3:07". It must end on this cliffhanger: Kabir's own truck drives past the stall with Kabir at the wheel, heading for the broken bridge.
+
+LOOK (identical in every shot): Vertical 9:16, cinematic realism, film grain, night on a foggy Himalayan mountain highway, cold blue moonlight with warm orange lantern glow.
+
+CHARACTERS (each must look exactly the same in every shot they appear in):
+
+- Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt. Role: protagonist. Personality: Gruff, practical, believes in nothing he cannot repair, quietly grieving. Voice: Deep, tired male voice, Hindi-accented English, speaks slowly.
+
+- Noor, a 20-year-old Indian woman with a long single black braid, a small silver nose stud, pale grey eyes, wearing a dark green salwar kameez and a mustard yellow shawl. Role: guide. Personality: Calm, kind, speaks as if she has said this many times, never blinks at danger. Voice: Soft young female voice, unhurried, slight echo.
+
+SHOTS, in order (7 shots; keep each to its exact length):
+
+1. [0:00-0:03, 3s] Close-up of a truck dashboard clock changing from 3:06 to 3:07, then through the windscreen a small tin-roofed roadside tea stall with a single lantern fades into existence in the fog at the cliff edge. Static shot, slight rack focus from clock to stall. Sound: Engine idle, one deep bell note as the clock changes. On-screen caption: "It only appears at 3:07 AM." Transition into this shot: cold open.
+
+2. [0:03-0:09, 6s] Kabir climbs down from the cab of a painted Indian cargo truck and walks warily toward a small tin-roofed roadside tea stall lit by a single lantern. Wide shot from behind him, slow push forward, fog curling around his boots. Voiceover (not lip-synced): Kabir: Twenty years on this road. There was never a stall here. Sound: Boots on gravel, wind. Transition into this shot: cut.
+
+3. [0:09-0:17, 8s] Medium close-up of Noor standing behind the wooden counter of a tin-roofed tea stall, steam rising from a kettle. She slides a glass of chai forward without looking down and says softly: "Your tea, Kabir. Two sugars. Do not leave before 3:08." Her face is calm, lantern light on one side. Spoken on screen, lips in sync: Noor: Your tea, Kabir. Two sugars. Do not leave before 3:08. Sound: Kettle hiss, distant wind. Transition into this shot: cut.
+
+4. [0:17-0:25, 8s] Medium close-up of Kabir at the counter of a tin-roofed tea stall, holding a small glass of chai. He frowns, then gives a short disbelieving laugh and says: "How do you know my name, girl? I have a delivery to make." He turns his head toward the road. Spoken on screen, lips in sync: Kabir: How do you know my name, girl? I have a delivery to make. Sound: Low drone begins. Transition into this shot: cut.
+
+5. [0:25-0:33, 8s] Kabir steps away from a tin-roofed tea stall toward the road, glass of chai in hand, then stops dead as bright headlights sweep across his face from the left. Side tracking shot, the headlights flaring through fog. Sound: A truck horn approaching, drone rising. Transition into this shot: cut on the headlight flare.
+
+6. [0:33-0:41, 8s] A painted Indian cargo truck roars past very close. Through its side window, clearly visible at the steering wheel, is Kabir, staring straight ahead, unaware. Slow-motion pan following the cab as it passes, then tail lights disappearing into fog toward a broken bridge sign. Sound: Truck roar in slow motion, then sudden silence. On-screen caption: "That's... me?" Transition into this shot: cut.
+
+7. [0:41-0:47, 6s] Two-shot at a tin-roofed tea stall. In the foreground, out of focus, Kabir stands frozen with his back to camera, glass of chai trembling in his hand. Behind the counter in sharp focus, Noor looks at him and says quietly: "Now you believe me." The lantern flickers. Spoken on screen, lips in sync: Noor: Now you believe me. Sound: Lantern flicker, a distant crash, silence. On-screen caption: "Ep 2: who is driving?" Transition into this shot: hard cut to black.
+
+EDITING: Cut on action with no fades unless a shot says otherwise. Captions are bold white with a black outline in the upper third, shown for the whole shot they belong to; add no other text, logos or watermarks. Keep colour, lighting and character looks continuous from shot to shot. Voices sit above music and sound effects. End on the last shot's image, then cut to black.
+```
+
 ## Why this video
 
 - Trend: Local horror tied to a real kind of place: haunted highway stories (811K) and festival ghost stories (4.5M) lead this week's scan

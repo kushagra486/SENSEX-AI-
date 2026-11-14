@@ -110,3 +110,19 @@ def test_render_lists_hook_and_title_variants():
     text = render(package, TOOLS)
     assert package.story.hook_variants[0] in text
     assert package.posting.title_variants[1] in text
+
+
+def test_episode_prompt_holds_the_whole_episode_once():
+    from sensex.script.render import episode_prompt, shared_style
+    package = build()
+    style = shared_style(package)
+    assert style == "Vertical 9:16, cinematic realism, night, heavy rain."
+    text = episode_prompt(package)
+    assert text.count(style) == 1                      # the look is stated once, not per shot
+    mira = package.characters[0]
+    assert text.count(mira.visual_block) == 1          # described once, then referred to by name
+    assert "2. [0:04-0:12, 8s] Mira crouches by a parcel" in text
+    assert 'Spoken on screen, lips in sync: Mira: Nobody has lived here for ten years, Tik.' in text
+    assert 'On-screen caption: "This parcel is for a dead man."' in text
+    assert package.series.cliffhanger in text and "EDITING:" in text
+    assert text in render(package, TOOLS)

@@ -13,6 +13,63 @@ def _code(text: str) -> str:
     return f"```text\n{text.strip()}\n```"
 
 
+def shared_style(package: ScriptPackage) -> str:
+    """The opening sentences every shot prompt has in common: the look of the whole video."""
+    prompts = [shot.prompt for shot in package.shots]
+    prefix = prompts[0]
+    for prompt in prompts[1:]:
+        while not prompt.startswith(prefix):
+            prefix = prefix[:-1]
+    cut = prefix.rfind(". ")
+    return prefix[: cut + 1].strip() if cut > 0 else ""
+
+
+def episode_prompt(package: ScriptPackage) -> str:
+    """One prompt holding the whole episode: look, characters, every shot, sound and editing."""
+    style = shared_style(package)
+    looks = {character.visual_block: character.name for character in package.characters}
+    lines = [
+        f'Create one {_clock(package.runtime_seconds)} video in {package.aspect_ratio} format: "{package.title}".',
+        f"STORY: {package.logline}",
+    ]
+    if package.series:
+        lines.append(f"This is episode {package.series.episode_number} of the series "
+                     f'"{package.series.title}". It must end on this cliffhanger: {package.series.cliffhanger}')
+    if style:
+        lines.append(f"LOOK (identical in every shot): {style}")
+    lines.append("CHARACTERS (each must look exactly the same in every shot they appear in):")
+    for character in package.characters:
+        lines.append(f"- {character.visual_block}. Role: {character.role}. "
+                     f"Personality: {character.personality}. Voice: {character.voice}.")
+    lines.append(f"SHOTS, in order ({len(package.shots)} shots; keep each to its exact length):")
+    start = 0.0
+    for number, shot in enumerate(package.shots, 1):
+        action = shot.prompt[len(style):].strip() if style and shot.prompt.startswith(style) else shot.prompt
+        for look, name in looks.items():
+            action = action.replace(look, name)
+        end = start + shot.duration_seconds
+        parts = [f"{number}. [{_clock(start)}-{_clock(end)}, {shot.duration_seconds:g}s] {action}"]
+        if shot.dialogue:
+            parts.append(f"Spoken on screen, lips in sync: {shot.dialogue}")
+        if shot.voiceover:
+            parts.append(f"Voiceover (not lip-synced): {shot.voiceover}")
+        if shot.sound:
+            parts.append(f"Sound: {shot.sound}.")
+        if shot.on_screen_text:
+            parts.append(f'On-screen caption: "{shot.on_screen_text}"')
+        parts.append(f"Transition into this shot: {shot.transition}.")
+        lines.append(" ".join(parts))
+        start = end
+    lines.append(
+        "EDITING: Cut on action with no fades unless a shot says otherwise. Captions are bold white "
+        "with a black outline in the upper third, shown for the whole shot they belong to; add no "
+        "other text, logos or watermarks. Keep colour, lighting and character looks continuous from "
+        "shot to shot. Voices sit above music and sound effects. End on the last shot's image, then "
+        "cut to black."
+    )
+    return "\n\n".join(lines)
+
+
 def render(package: ScriptPackage, tools: ToolsConfig) -> str:
     out: list[str] = [f"# {package.title}", f"*{package.logline}*"]
     out.append(
@@ -20,6 +77,10 @@ def render(package: ScriptPackage, tools: ToolsConfig) -> str:
         f"**Aspect:** {package.aspect_ratio} · **Runtime:** {_clock(package.runtime_seconds)} "
         f"({len(package.shots)} shots)"
     )
+
+    out.append("## Whole-episode prompt\n\nEverything in one prompt, for a tool that makes a whole video "
+               "from a single description. Tools that make one short clip at a time need the "
+               "per-shot prompts further down instead.\n\n" + _code(episode_prompt(package)))
 
     out.append("## Why this video\n\n" + "\n".join(f"- Trend: {item}" for item in package.trend_basis)
                + f"\n- Our twist: {package.original_twist}")

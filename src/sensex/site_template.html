@@ -351,6 +351,35 @@ function table(headers, rows) {
     h("thead", {}, h("tr", {}, headers.map(([text, cls]) => h("th", { class: cls }, text)))),
     h("tbody", {}, rows.map((cells) => h("tr", {}, cells.map((cell, i) => h("td", { class: headers[i][1] }, cell)))))));
 }
+function sharedStyle(p) {
+  let prefix = p.shots[0].prompt;
+  for (const s of p.shots) while (!s.prompt.startsWith(prefix)) prefix = prefix.slice(0, -1);
+  const cut = prefix.lastIndexOf(". ");
+  return cut > 0 ? prefix.slice(0, cut + 1).trim() : "";
+}
+function episodePrompt(p) {
+  const style = sharedStyle(p), total = p.shots.reduce((a, s) => a + s.duration_seconds, 0);
+  const lines = [`Create one ${clock(total)} video in ${p.aspect_ratio} format: "${p.title}".`, `STORY: ${p.logline}`];
+  if (p.series) lines.push(`This is episode ${p.series.episode_number} of the series "${p.series.title}". It must end on this cliffhanger: ${p.series.cliffhanger}`);
+  if (style) lines.push(`LOOK (identical in every shot): ${style}`);
+  lines.push("CHARACTERS (each must look exactly the same in every shot they appear in):");
+  for (const c of p.characters) lines.push(`- ${c.visual_block}. Role: ${c.role}. Personality: ${c.personality}. Voice: ${c.voice}.`);
+  lines.push(`SHOTS, in order (${p.shots.length} shots; keep each to its exact length):`);
+  let at = 0;
+  p.shots.forEach((s, i) => {
+    let action = style && s.prompt.startsWith(style) ? s.prompt.slice(style.length).trim() : s.prompt;
+    for (const c of p.characters) action = action.split(c.visual_block).join(c.name);
+    const parts = [`${i + 1}. [${clock(at)}-${clock(at + s.duration_seconds)}, ${s.duration_seconds}s] ${action}`];
+    if (s.dialogue) parts.push(`Spoken on screen, lips in sync: ${s.dialogue}`);
+    if (s.voiceover) parts.push(`Voiceover (not lip-synced): ${s.voiceover}`);
+    if (s.sound) parts.push(`Sound: ${s.sound}.`);
+    if (s.on_screen_text) parts.push(`On-screen caption: "${s.on_screen_text}"`);
+    parts.push(`Transition into this shot: ${s.transition}.`);
+    lines.push(parts.join(" ")); at += s.duration_seconds;
+  });
+  lines.push("EDITING: Cut on action with no fades unless a shot says otherwise. Captions are bold white with a black outline in the upper third, shown for the whole shot they belong to; add no other text, logos or watermarks. Keep colour, lighting and character looks continuous from shot to shot. Voices sit above music and sound effects. End on the last shot's image, then cut to black.");
+  return lines.join("\n\n");
+}
 const allScripts = () => [...[...appScripts].sort((a, b) => b.created - a.created), ...DATA.scripts.map((s) => ({ id: s.folder, package: s.package, source: "repo" }))];
 
 /* ---------- views ---------- */
@@ -402,6 +431,9 @@ function scriptView() {
       r.errors.map((w) => h("p", { class: "warn" }, "Breaks a limit: " + w)), r.warnings.map((w) => h("p", { class: "warn" }, "Check: " + w))),
     h("section", {}, h("div", { class: "stack tight" }, strip, h("div", { class: "ruler" }, h("span", {}, "0:00"), h("span", {}, clock(r.runtime / 2)), h("span", {}, clock(r.runtime)))),
       h("div", { class: "legend" }, Object.keys(r.clips).map((t) => h("span", { style: `--hue:${hue(t)}` }, h("i"), `${label(t)}: ${r.clips[t]} clips, ${r.credits[t]} credits, ${r.days[t]} day${r.days[t] === 1 ? "" : "s"}`)))),
+    h("section", {}, h("h2", {}, "Whole-episode prompt"),
+      h("p", { class: "muted" }, "Everything in one prompt, for a tool that makes a whole video from a single description. Tools that make one short clip at a time need the per-shot prompts further down."),
+      copyBlock(episodePrompt(p))),
     h("section", { class: "two" },
       h("div", { class: "panel" }, h("h2", {}, "Why this video"), h("ul", {}, p.trend_basis.map((t) => h("li", {}, t))), h("p", {}, h("strong", {}, "Our twist: "), p.original_twist)),
       h("div", { class: "panel" }, h("h2", {}, "Story"), h("p", {}, h("strong", {}, "Opening: "), p.story.opening_hook),

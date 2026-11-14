@@ -4,6 +4,58 @@
 
 **Format:** series episode · **Platform:** YouTube Shorts and Instagram Reels · **Aspect:** 9:16 · **Runtime:** 1:09 (13 shots)
 
+## Whole-episode prompt
+
+Everything in one prompt, for a tool that makes a whole video from a single description. Tools that make one short clip at a time need the per-shot prompts further down instead.
+
+```text
+Create one 1:09 video in 9:16 format: "Result Day, Ep 1: Chawal Ka Dabba".
+
+STORY: A daughter-in-law treated as the household help is secretly studying for the civil services exam at 4 a.m., until her mother-in-law finds the books hidden in the rice.
+
+This is episode 1 of the series "Result Day". It must end on this cliffhanger: Sarla holds Meera's admit card over the gas flame as Meera walks in.
+
+LOOK (identical in every shot): Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls.
+
+CHARACTERS (each must look exactly the same in every shot they appear in):
+
+- Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles. Role: protagonist. Personality: Patient, observant, proud, says little and remembers everything. Voice: Soft, steady young woman's voice, Hindi with a Lucknow politeness.
+
+- Sarla, a 58-year-old Indian woman with grey-streaked hair in a tight bun, round steel-rimmed spectacles, a stern mouth, wearing a white cotton saree with a thin blue border and a bunch of keys at her waist. Role: antagonist. Personality: Sharp-tongued, tired, afraid of losing control of her home, not cruel for its own sake. Voice: Dry, clipped older woman's voice.
+
+- Vikram, a 29-year-old Indian man with short side-parted hair, a thin moustache, wearing a light blue office shirt and a black laptop bag on one shoulder. Role: husband. Personality: Distracted, conflict-avoiding, fond of Meera but never looks up. Voice: Mild, hurried male voice.
+
+SHOTS, in order (13 shots; keep each to its exact length):
+
+1. [0:00-0:03, 3s] Before dawn, dim blue light. Extreme close-up of a woman's hands pushing a thick textbook deep into a large steel rice container and covering it with rice grains. Glass bangles on her wrists. Slow push-in. Sound: Rice grains shifting, a distant azaan. On-screen caption: "Subah 4 baje. Ghar mein kisi ko nahi pata." Transition into this shot: cold open.
+
+2. [0:03-0:08, 5s] Before dawn. Meera sits cross-legged on the kitchen floor reading handwritten notes by the light of a phone torch propped against a steel tin, lips moving silently. Low side angle, the rest of the house dark. Voiceover (not lip-synced): Meera: Is ghar ki bahu raat ko sirf bartan nahi maanjti. Sound: A ceiling fan, pages turning. Transition into this shot: cut.
+
+3. [0:08-0:12, 4s] Before dawn. Meera looks up sharply as a tube light flickers on in the corridor behind her, then slides her notes under a folded dish towel. Handheld, quick rack focus to the lit corridor. Sound: A switch clicks, slippers on the floor. Transition into this shot: cut.
+
+4. [0:12-0:20, 8s] Early morning. Sarla walks into the kitchen and stops, looking at the cold stove. She says sharply in Hindi: "Chai abhi tak nahi bani? Maharani ki neend poori nahi hoti." In the background Meera lowers her eyes and lights the gas. Medium two-shot, static. Spoken on screen, lips in sync: Sarla: Chai abhi tak nahi bani? Maharani ki neend poori nahi hoti. Transition into this shot: cut.
+
+5. [0:20-0:25, 5s] Morning. Meera serves parathas onto steel plates at a small dining table while three family members eat and watch a television off screen. Nobody looks at her. Slow sideways tracking shot. Voiceover (not lip-synced): Meera: Teen saal ho gaye. Kisi ne nahi poocha, tum kya banna chahti thi. Sound: A TV news jingle, steel plates. Transition into this shot: cut.
+
+6. [0:25-0:30, 5s] Morning. Vikram takes a steel lunch box from a woman's outstretched hands without looking up from his phone and walks out of the front door. Medium shot from inside the house, her hands stay in frame. Voiceover (not lip-synced): Meera: Unhe tiffin yaad rehta hai. Main nahi. Sound: A scooter starting outside. Transition into this shot: cut.
+
+7. [0:30-0:38, 8s] Late morning. Sarla leans on a balcony wall talking to a neighbour off screen, shaking her head. She says in Hindi: "Padhi-likhi bahu laaye the. Ab dekho, ek roti gol nahi banti." Medium close-up, sunlit balcony with drying clothes. Spoken on screen, lips in sync: Sarla: Padhi-likhi bahu laaye the. Ab dekho, ek roti gol nahi banti. Transition into this shot: cut.
+
+8. [0:38-0:43, 5s] Afternoon on a rooftop terrace with clotheslines. Meera pauses while hanging a wet bedsheet, takes a folded printed paper from the waist of her saree, unfolds it and stares at it. Close-up over her shoulder, wind moving the sheet. Voiceover (not lip-synced): Meera: Chhe din. Bas chhe din aur. Sound: Wind, a pressure cooker whistle far away. On-screen caption: "Pariksha: 6 din baad" Transition into this shot: cut.
+
+9. [0:43-0:47, 4s] Afternoon. Close-up of a paper wall calendar in a kitchen, a date circled in red pen, a woman's finger with glass bangles touching the circle. Static shot. Sound: A clock ticking. Transition into this shot: cut.
+
+10. [0:47-0:52, 5s] Evening kitchen, warm bulb light. Sarla scoops rice from a large steel container with a steel bowl; the bowl hits something hard and she frowns. Medium close-up on her face and hands. Sound: Steel hitting something solid. On-screen caption: "Us shaam..." Transition into this shot: cut.
+
+11. [0:52-0:57, 5s] Evening kitchen, warm bulb light. Sarla pulls a thick textbook and a bundle of handwritten notes out of a steel rice container, rice grains falling off them. Close-up on the book in her hands, then her face hardening. Voiceover (not lip-synced): Sarla: Yeh... yeh kya hai? Sound: Rice scattering on the floor. Transition into this shot: cut.
+
+12. [0:57-1:05, 8s] Evening kitchen, warm bulb light. Sarla stands at the stove holding a printed admit card a few inches above a lit gas flame. Meera appears in the doorway and freezes. Sarla says in Hindi, cold and quiet: "Yeh sab mere ghar mein, meri peeth peeche?" Medium shot, the flame in the foreground. Spoken on screen, lips in sync: Sarla: Yeh sab mere ghar mein, meri peeth peeche? Sound: Gas flame hissing. Transition into this shot: cut.
+
+13. [1:05-1:09, 4s] Evening kitchen. Extreme close-up of Meera, eyes wide and fixed on something off screen, the orange light of a gas flame flickering on her face. Slow push-in. Sound: Flame hiss, then silence. On-screen caption: "Kal: Episode 2" Transition into this shot: hard cut to black.
+
+EDITING: Cut on action with no fades unless a shot says otherwise. Captions are bold white with a black outline in the upper third, shown for the whole shot they belong to; add no other text, logos or watermarks. Keep colour, lighting and character looks continuous from shot to shot. Voices sit above music and sound effects. End on the last shot's image, then cut to black.
+```
+
 ## Why this video
 
 - Trend: Family cruelty and payback dramas in Hindi and Urdu fill this week's top 'AI story' results (491K, 486K, 576K views)

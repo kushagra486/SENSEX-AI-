@@ -4,6 +4,58 @@
 
 **Format:** series episode · **Platform:** YouTube Shorts and Instagram Reels · **Aspect:** 9:16 · **Runtime:** 1:28 (13 shots)
 
+## Whole-episode prompt
+
+Everything in one prompt, for a tool that makes a whole video from a single description. Tools that make one short clip at a time need the per-shot prompts further down instead.
+
+```text
+Create one 1:28 video in 9:16 format: "Pintu Pigeon, CEO. Ep 1: The Drone".
+
+STORY: A proud delivery pigeon loses every customer to a 10-minute delivery drone, until one lunch box needs to go where no drone can fly.
+
+This is episode 1 of the series "Pintu Pigeon, CEO". It must end on this cliffhanger: A hundred drones rise over the skyline behind Pintu.
+
+LOOK (identical in every shot): Vertical 9:16, bright colourful 3D animated cartoon, soft cinematic lighting, a sunny Mumbai rooftop neighbourhood with blue water tanks, clotheslines and satellite dishes.
+
+CHARACTERS (each must look exactly the same in every shot they appear in):
+
+- Pintu, a plump grey city pigeon with a shiny green-and-purple neck, big expressive brown eyes, wearing a tiny red waistcoat with gold buttons and a miniature black leather satchel across his chest. Role: protagonist. Personality: Boastful, loyal, quick-thinking, hates being called old-fashioned. Voice: Fast, confident Mumbai street voice, slightly nasal.
+
+- Drona, a sleek glossy white delivery drone with four black rotors, one glowing red camera eye and a small blue cargo box underneath. Role: antagonist. Personality: Literal, smug, speaks in statistics, cannot improvise. Voice: Flat robotic voice with a soft electronic hum.
+
+- Ammaji, a 70-year-old Indian grandmother with silver hair in a bun, round gold spectacles, wearing a purple cotton saree and a white cardigan. Role: ally. Personality: Kind, loud, trusts what she has known for years. Voice: Warm elderly woman's voice, loud enough to cross a street.
+
+SHOTS, in order (13 shots; keep each to its exact length):
+
+1. [0:00-0:03, 3s] Pintu stands on a water tank holding a small brown parcel in his beak. Drona zooms past and snatches the parcel away, leaving him spinning. Fast whip-pan following the drone. Sound: Whoosh, comic record scratch. On-screen caption: "A drone just stole his job." Transition into this shot: cold open.
+
+2. [0:03-0:09, 6s] Pintu stamps tiny parcels at a desk made from a matchbox on top of a blue water tank, under a hand-painted wooden sign with a pigeon logo. Slow push-in, morning sun. Voiceover (not lip-synced): Narrator: For nineteen years, Pintu ran the fastest delivery service in Mumbai. Sound: Cheerful tabla and whistle theme. Transition into this shot: cut.
+
+3. [0:09-0:17, 8s] Medium close-up of Pintu puffing out his chest and speaking proudly to the camera in a fast, confident voice: "Pigeon Express. No app, no battery, no problem." He adjusts his waistcoat with one wing. Spoken on screen, lips in sync: Pintu: Pigeon Express. No app, no battery, no problem. Transition into this shot: cut.
+
+4. [0:17-0:24, 7s] Drona descends dramatically between apartment buildings trailing a long banner showing a stopwatch icon, while people on balconies cheer and raise their phones. Low angle looking up, lens flare. Voiceover (not lip-synced): Narrator: Then Drona arrived. Ten-minute delivery. Sound: Electronic bass drop. Transition into this shot: cut.
+
+5. [0:24-0:32, 8s] Two-shot on a water tank. Drona hovers face to face with Pintu, its red eye scanning him up and down. The drone says in a flat robotic voice: "You are obsolete, bird. Estimated retirement: now." The pigeon's feathers ruffle in the rotor wind. Spoken on screen, lips in sync: Drona: You are obsolete, bird. Estimated retirement: now. Sound: Rotor hum. Transition into this shot: cut.
+
+6. [0:32-0:38, 6s] Sunset. Pintu sits alone beside an empty chalkboard on a water tank, a single feather drifting down past him. Wide static shot, orange sky. Voiceover (not lip-synced): Narrator: By evening, Pintu had zero orders. Sound: One sad shehnai note. Transition into this shot: cut.
+
+7. [0:38-0:46, 8s] Ammaji leans over a balcony railing holding up a small steel lunch box and calls out anxiously: "My grandson forgot his lunch! Fourth floor, the window with the grille!" Medium shot, evening light. Spoken on screen, lips in sync: Ammaji: My grandson forgot his lunch! Fourth floor, the window with the grille! Transition into this shot: cut.
+
+8. [0:46-0:53, 7s] Drona carrying a small steel lunch box flies straight into a clothesline of colourful sarees and kite strings stretched between two buildings, gets wrapped up and spins helplessly, dropping the lunch box. Side view, comic slow motion. Voiceover (not lip-synced): Narrator: Drona calculated the fastest route. Drona did not calculate laundry. Sound: Tangled rotor buzz, error beeps. Transition into this shot: cut.
+
+9. [0:53-1:01, 8s] Pintu dives off a water tank, catches a falling small steel lunch box by its handle in mid-air, and swoops gracefully under rows of clotheslines between buildings. Dynamic tracking shot from behind him. Voiceover (not lip-synced): Narrator: Pintu did. Sound: Heroic tabla theme kicks in. Transition into this shot: cut.
+
+10. [1:01-1:07, 6s] Pintu squeezes through the narrow bars of a window grille holding a small steel lunch box and places it on a study desk in front of an astonished schoolboy. Interior shot looking toward the window. Sound: Soft metallic clink, a gasp. On-screen caption: "Delivered in 4 minutes." Transition into this shot: cut.
+
+11. [1:07-1:15, 8s] Close-up of Pintu standing on a windowsill. He tips an imaginary hat with one wing, winks, and says smoothly: "Delivery ho gayi, boss." Golden evening light behind him. Spoken on screen, lips in sync: Pintu: Delivery ho gayi, boss. On-screen caption: "Delivery ho gayi, boss." Transition into this shot: cut.
+
+12. [1:15-1:22, 7s] On a balcony, Ammaji gently pats the head of Pintu, who salutes with one wing. She says warmly: "From tomorrow, only Pintu." Neighbours clap on balconies in the background. Spoken on screen, lips in sync: Ammaji: From tomorrow, only Pintu. Sound: Applause. Transition into this shot: cut.
+
+13. [1:22-1:28, 6s] Dusk. Close on the proud face of Pintu, which slowly falls as, out of focus behind him, a hundred identical white delivery drones with red eyes rise over the city skyline. Rack focus from his face to the swarm. Sound: Low ominous hum, music cuts out. On-screen caption: "Ep 2: The Swarm" Transition into this shot: hard cut to black.
+
+EDITING: Cut on action with no fades unless a shot says otherwise. Captions are bold white with a black outline in the upper third, shown for the whole shot they belong to; add no other text, logos or watermarks. Keep colour, lighting and character looks continuous from shot to shot. Voices sit above music and sound effects. End on the last shot's image, then cut to black.
+```
+
 ## Why this video
 
 - Trend: Recurring mascot characters lead the short-video scan: one lion character has at least four of the top short videos

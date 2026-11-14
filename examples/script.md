@@ -4,6 +4,42 @@
 
 **Format:** series episode · **Platform:** YouTube Shorts · **Aspect:** 9:16 · **Runtime:** 0:42 (6 shots)
 
+## Whole-episode prompt
+
+Everything in one prompt, for a tool that makes a whole video from a single description. Tools that make one short clip at a time need the per-shot prompts further down instead.
+
+```text
+Create one 0:42 video in 9:16 format: "The Last Delivery, Ep 1: Wrong Address".
+
+STORY: A broke courier and a glitchy delivery robot open a parcel addressed to someone who died ten years ago.
+
+This is episode 1 of the series "The Last Delivery". It must end on this cliffhanger: The parcel contains Mira's own childhood photo, dated next week.
+
+LOOK (identical in every shot): Vertical 9:16, cinematic realism, night, heavy rain.
+
+CHARACTERS (each must look exactly the same in every shot they appear in):
+
+- Mira, a 19-year-old Indian woman with a short black bob haircut, a thin scar through her left eyebrow, wearing an oversized yellow raincoat over a grey hoodie. Role: protagonist. Personality: Sarcastic, stubborn, hides fear behind jokes. Voice: Young woman, dry and quick, light Mumbai accent.
+
+- Tik, a knee-high rusty orange delivery robot with one cracked round blue eye-lens and a dented boxy body on two small wheels. Role: sidekick. Personality: Literal-minded, cheerful, terrible timing. Voice: Small chirpy synthetic voice.
+
+SHOTS, in order (6 shots; keep each to its exact length):
+
+1. [0:00-0:04, 4s] Extreme close-up of a brown paper parcel on a wet stone doorstep, a shipping label with a name crossed out in red ink, the parcel trembling slightly. Slow push-in, cold blue streetlight. Sound: Rain, a faint mechanical ticking. On-screen caption: "This parcel is for a dead man." Transition into this shot: cold open.
+
+2. [0:04-0:12, 8s] Mira crouches by a parcel on the doorstep of a dark abandoned house. Beside her is Tik. She says, annoyed: "Nobody has lived here for ten years, Tik." The robot's lens flickers. Medium two-shot, handheld, blue streetlight. Spoken on screen, lips in sync: Mira: Nobody has lived here for ten years, Tik. Sound: Rain, ticking continues. Transition into this shot: cut.
+
+3. [0:12-0:20, 8s] Close-up of Tik, tilting its body upward. It says in a chirpy synthetic voice: "Delivery must be completed. Recipient is inside." Rain streaks down its lens, a window glows faintly behind it. Spoken on screen, lips in sync: Tik: Delivery must be completed. Recipient is inside. Transition into this shot: cut.
+
+4. [0:20-0:26, 6s] Mira looks up slowly at a dark upstairs window of the abandoned house, fear replacing her smirk. Low angle, slow tilt up from her face to the window. Sound: Ticking stops abruptly. Transition into this shot: cut on the silence.
+
+5. [0:26-0:34, 8s] Mira tears open a brown paper parcel with shaking hands and pulls out a faded photograph. Over-the-shoulder shot, shallow focus on her hands. Sound: Paper tearing, low drone rising. Transition into this shot: cut.
+
+6. [0:34-0:42, 8s] Close-up of a faded photograph of a small girl in a yellow raincoat, a date stamp in the corner, held in wet fingers. Rack focus to Mira, her face frozen in shock, as warm lights switch on in the house behind her. Voiceover (not lip-synced): Mira: That's me. And that date... is next week. On-screen caption: "Ep 2 tomorrow" Transition into this shot: hard cut to black.
+
+EDITING: Cut on action with no fades unless a shot says otherwise. Captions are bold white with a black outline in the upper third, shown for the whole shot they belong to; add no other text, logos or watermarks. Keep colour, lighting and character looks continuous from shot to shot. Voices sit above music and sound effects. End on the last shot's image, then cut to black.
+```
+
 ## Why this video
 
 - Trend: Hidden-identity reveals dominate top AI drama titles
