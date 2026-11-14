@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-from sensex.config import ROOT, load_tools
+from sensex.config import ROOT, load_channel, load_tools
 from sensex.script.package import ScriptPackage, budget, check
 
 TEMPLATE = Path(__file__).with_name("site_template.html")
@@ -36,7 +36,9 @@ def collect(root: Path = ROOT) -> dict:
         trends["notes"] = text[text.index(NOTES_HEADING) + len(NOTES_HEADING):] if NOTES_HEADING in text else ""
     return {
         "built": datetime.now().strftime("%d %b %Y, %H:%M"),
-        "tools": {name: {"label": tool.label} for name, tool in tools.tools.items()},
+        "tools": {name: tool.model_dump() for name, tool in tools.tools.items()},
+        "max_days": tools.max_days_per_video,
+        "channel": load_channel().channel.model_dump(),
         "scripts": scripts,
         "series": series,
         "trends": trends,

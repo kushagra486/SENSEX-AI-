@@ -96,6 +96,17 @@ td.title { min-width: 220px; }
 .notes { display: flex; flex-direction: column; gap: 10px; }
 .notes h3 { margin-top: 8px; font: 700 16px var(--display); }
 .empty { color: var(--muted); padding: 24px 0; }
+.form { gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+label { font-weight: 600; font-size: 14px; }
+.small { font-size: 13px; }
+input, select, textarea { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 9px 10px; width: 100%; box-sizing: border-box; min-width: 0; }
+textarea { resize: vertical; line-height: 1.5; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+button.primary { background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 6px; padding: 10px 18px; font-weight: 600; }
+button.primary:disabled { opacity: 0.5; cursor: not-allowed; }
+button.plain { background: none; border: 1px solid var(--line); border-radius: 6px; padding: 8px 14px; color: var(--muted); }
+button.danger { background: var(--warn); color: var(--bg); border: 0; border-radius: 6px; padding: 8px 14px; font-weight: 600; }
 </style>
 
 <header class="bar"><div class="wrap gutter">
@@ -107,13 +118,23 @@ td.title { min-width: 220px; }
 <script type="application/json" id="data">/*DATA*/</script>
 <script>
 const DATA = JSON.parse(document.getElementById("data").textContent);
-const VIEWS = [["scripts", "Scripts"], ["series", "Series"], ["trends", "Trends"]];
-const toolNames = Object.keys(DATA.tools);
+const VIEWS = [["scripts", "Scripts"], ["create", "Create"], ["series", "Series"], ["trends", "Trends"]];
+const TOOLS = DATA.tools;
+const toolNames = Object.keys(TOOLS);
+const RANGES = { short: [15, 90], solo_drama: [60, 240], series_episode: [30, 240], long_video: [300, 1800] };
 const hue = (tool) => `var(--tool-${(Math.max(0, toolNames.indexOf(tool)) % 4) + 1})`;
-const label = (tool) => (DATA.tools[tool] || {}).label || tool;
+const label = (tool) => (TOOLS[tool] || {}).label || tool;
 const clock = (s) => { s = Math.round(s); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
 const num = (n) => Number(n).toLocaleString("en-IN");
+const slug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60);
+
+let db = null, ask = null, ready = false;
+let appScripts = [];
 let selected = null;
+let busy = null;            // text shown while Claude is writing
+let notice = "";            // last error or result message on the Create view
+let removing = null;        // id of the script awaiting delete confirmation
+const draft = { kind: "series_episode", idea: "", language: DATA.channel.language, seconds: 60, tier: "default", change: "" };
 
 function h(tag, attrs, ...kids) {
   const el = document.createElement(tag);
@@ -121,41 +142,200 @@ function h(tag, attrs, ...kids) {
     if (v == null || v === false) continue;
     if (k === "class") el.className = v;
     else if (k === "style") el.style.cssText = v;
+    else if (k === "value") el.value = v;
     else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
-    else el.setAttribute(k, v);
+    else el.setAttribute(k, v === true ? "" : v);
   }
   for (const kid of kids.flat(Infinity)) if (kid != null && kid !== false) el.append(kid);
   return el;
 }
 
-function inline(text) {
-  const out = [];
-  const pattern = /\*\*(.+?)\*\*|\[([^\]]+)\]\((https?:[^)]+)\)/g;
-  let last = 0, m;
-  while ((m = pattern.exec(text))) {
-    if (m.index > last) out.push(text.slice(last, m.index));
-    out.push(m[1] ? h("strong", {}, m[1]) : h("a", { href: m[3], target: "_blank", rel: "noopener" }, m[2]));
-    last = pattern.lastIndex;
+/* ---------- checking a script against the tool limits (mirrors `sensex check`) ---------- */
+function review(p) {
+  const errors = [], warnings = [];
+  const chars = Object.fromEntries(p.characters.map((c) => [c.id, c]));
+  const clips = {};
+  let runtime = 0, quiet = 0, longest = 0;
+  for (const s of p.shots) {
+    runtime += s.duration_seconds;
+    const tool = TOOLS[s.tool];
+    if (!tool) { errors.push(`Shot ${s.id}: unknown tool "${s.tool}". Use one of: ${toolNames.join(", ")}.`); continue; }
+    clips[s.tool] = (clips[s.tool] || 0) + 1;
+    if (s.duration_seconds > tool.max_clip_seconds) errors.push(`Shot ${s.id}: ${s.duration_seconds}s is longer than ${tool.label}'s ${tool.max_clip_seconds}s clip limit. Split it.`);
+    if (s.dialogue && !tool.has_audio) warnings.push(`Shot ${s.id} has dialogue, but ${tool.label} makes silent clips. Voice the line separately.`);
+    for (const id of s.characters) if (!chars[id]) errors.push(`Shot ${s.id}: unknown character "${id}".`);
+    quiet = (s.dialogue || s.voiceover) ? 0 : quiet + s.duration_seconds;
+    longest = Math.max(longest, quiet);
   }
+  const credits = {}, days = {};
+  for (const [t, n] of Object.entries(clips)) { credits[t] = n * TOOLS[t].credits_per_clip; days[t] = Math.ceil(credits[t] / TOOLS[t].daily_credits); }
+  const daysNeeded = Math.max(0, ...Object.values(days));
+  if (Math.abs(runtime - p.target_runtime_seconds) > p.target_runtime_seconds * 0.15) errors.push(`Shots add up to ${runtime}s but the target is ${p.target_runtime_seconds}s.`);
+  if (daysNeeded > DATA.max_days) errors.push(`Needs ${daysNeeded} days of free credits; the limit is ${DATA.max_days}. Use fewer shots or a tool with more daily credits.`);
+  const [low, high] = RANGES[p.format] || [0, 1e9];
+  if (runtime < low || runtime > high) warnings.push(`${runtime}s is outside the usual ${low}-${high}s for this format.`);
+  const first = p.shots[0];
+  if (first.duration_seconds > 4) warnings.push(`The opening shot is ${first.duration_seconds}s. Keep it to 4s or less.`);
+  if (!(first.on_screen_text || first.dialogue || first.voiceover)) warnings.push("The opening has no on-screen text or spoken line.");
+  if (runtime <= 90 && runtime / p.shots.length > 7) warnings.push(`Average shot is ${(runtime / p.shots.length).toFixed(1)}s. Aim for 7s or less in short videos.`);
+  if (longest > 16) warnings.push(`${longest}s pass with no dialogue or voiceover.`);
+  return { errors, warnings, runtime, clips, credits, days, daysNeeded };
+}
+
+/* ---------- turning Claude's answer into a full package ---------- */
+const str = (v) => (typeof v === "string" ? v : "");
+function normalise(raw) {
+  if (!raw || typeof raw !== "object" || !Array.isArray(raw.shots) || !raw.shots.length || !Array.isArray(raw.characters)) throw new Error("The answer was not a script. Try again.");
+  const characters = raw.characters.map((c) => ({ id: str(c.id), name: str(c.name), role: str(c.role), archetype: str(c.archetype), personality: str(c.personality), voice: str(c.voice),
+    visual_block: str(c.visual_block).trim(), reference_image_prompt: str(c.reference_image_prompt) || `Character reference sheet, full body, front and side view, plain grey background. ${str(c.visual_block).trim()}.` }));
+  const looks = Object.fromEntries(characters.map((c) => [c.id, c.visual_block]));
+  const expand = (text) => str(text).replace(/\{\{\s*([\w-]+)\s*\}\}/g, (m, id) => looks[id] || m);
+  const shots = raw.shots.map((s, i) => {
+    const prompt = str(s.prompt);
+    const used = [...new Set([...prompt.matchAll(/\{\{\s*([\w-]+)\s*\}\}/g)].map((m) => m[1]).filter((id) => looks[id]))];
+    return { id: str(s.id) || "S" + (i + 1), act: str(s.act), duration_seconds: Number(s.duration_seconds) || 0, tool: str(s.tool), characters: used, prompt: expand(prompt),
+      dialogue: str(s.dialogue), voiceover: str(s.voiceover), sound: str(s.sound), on_screen_text: str(s.on_screen_text), transition: str(s.transition) || "cut" };
+  });
+  const story = raw.story || {}, posting = raw.posting || {}, list = (v) => (Array.isArray(v) ? v.map(str).filter(Boolean) : []);
+  const fmt = RANGES[raw.format] ? raw.format : "short";
+  const series = raw.series && fmt === "series_episode" ? { title: str(raw.series.title), episode_number: Number(raw.series.episode_number) || 1, season_arc: str(raw.series.season_arc), previously: str(raw.series.previously), cliffhanger: str(raw.series.cliffhanger) } : null;
+  return { format: fmt, title: str(raw.title) || "Untitled", logline: str(raw.logline), platform: str(raw.platform) || DATA.channel.platforms.join(", "), aspect_ratio: ["9:16", "16:9", "1:1"].includes(raw.aspect_ratio) ? raw.aspect_ratio : "9:16",
+    target_runtime_seconds: Number(raw.target_runtime_seconds) || shots.reduce((a, s) => a + s.duration_seconds, 0), trend_basis: list(raw.trend_basis), original_twist: str(raw.original_twist), series, characters,
+    story: { opening_hook: str(story.opening_hook), hook_variants: list(story.hook_variants), acts: (Array.isArray(story.acts) ? story.acts : []).map((a) => ({ name: str(a.name), summary: str(a.summary) })), ending: str(story.ending) },
+    shots, posting: { title: str(posting.title), title_variants: list(posting.title_variants), caption: str(posting.caption), hashtags: list(posting.hashtags), thumbnail_prompt: expand(posting.thumbnail_prompt) } };
+}
+// The reverse: put {{id}} back so Claude edits a compact version.
+function collapse(p) {
+  const copy = JSON.parse(JSON.stringify(p));
+  const swap = (text) => copy.characters.reduce((t, c) => t.split(c.visual_block).join(`{{${c.id}}}`), text);
+  for (const s of copy.shots) { s.prompt = swap(s.prompt); delete s.characters; }
+  copy.posting.thumbnail_prompt = swap(copy.posting.thumbnail_prompt);
+  for (const c of copy.characters) delete c.reference_image_prompt;
+  return copy;
+}
+
+/* ---------- the instructions sent to Claude ---------- */
+function brief() {
+  const t = DATA.trends || {};
+  const titles = (a) => ((a || {}).top_videos || []).slice(0, 12).map((v) => `- ${num(v.views)} views, ${clock(v.duration_seconds)}: ${v.title}`).join("\n");
+  const toolLines = toolNames.map((n) => `- "${n}" (${TOOLS[n].label}): clips up to ${TOOLS[n].max_clip_seconds}s, ${Math.floor(TOOLS[n].daily_credits / TOOLS[n].credits_per_clip)} clips per day, ${TOOLS[n].has_audio ? "generates speech and sound" : "silent clips"}`).join("\n");
+  return `You write script packages for AI-generated videos. The prompts you write get pasted into AI video tools one shot at a time.
+
+CHANNEL
+Niche: ${DATA.channel.niche}. Audience: ${DATA.channel.audience}. Platforms: ${DATA.channel.platforms.join(", ")}.
+
+VIDEO TOOLS (the "tool" of every shot must be one of these keys)
+${toolLines}
+The whole video must be generable within ${DATA.max_days} days of those daily limits. Spend the scarce tools that generate speech on dialogue and key emotional beats. Put silent action on the high-volume tool, with voiceover.
+
+WHAT IS TRENDING (scan of ${t.date || "no date"})
+${(t.notes || "No written analysis.").trim().slice(0, 6000)}
+
+Top long-form titles this week:
+${titles(t.analysis)}
+
+Top titles under four minutes:
+${titles(t.shorts_analysis)}
+
+ORIGINALITY
+Trends show what works; never copy. Take a pattern and build a new premise, world and characters. Never reuse another video's title, characters or plot, and never use real people, existing franchises or copyrighted characters.
+
+WRITING RULES
+- First shot: 2 to 4 seconds, the strangest or most tense image, with on-screen text or a spoken line.
+- Each character has a "visual_block": one concrete sentence fragment starting with their name (age, build, hair, a face mark, exact clothing and colours). In shot prompts and the thumbnail prompt, write {{character_id}} wherever the character appears; it is replaced by the visual_block, so never describe a character's looks any other way.
+- Every prompt stands alone: start with the aspect ratio, visual style, location, time of day and lighting. One action and one camera move per shot. For tools that generate speech, put the spoken line in quotes inside the prompt.
+- No shot longer than its tool's clip limit. Shot durations must add up to target_runtime_seconds.
+- In short videos keep the average shot at 7 seconds or less, and never go more than 16 seconds without dialogue or voiceover.
+- Keep casts small: 2 or 3 characters for anything under 3 minutes.
+- Series episodes end on a cliffhanger that raises a new question.
+- hook_variants and title_variants: two each, different angles, not rewordings.
+
+Reply with only one JSON object of this shape:
+{"format":"short|solo_drama|series_episode|long_video","title":"","logline":"","platform":"","aspect_ratio":"9:16","target_runtime_seconds":0,
+"trend_basis":["which trend this draws on"],"original_twist":"what makes it ours",
+"series":{"title":"","episode_number":1,"season_arc":"","previously":"","cliffhanger":""},
+"characters":[{"id":"lowercase_id","name":"","role":"","archetype":"","personality":"","voice":"","visual_block":""}],
+"story":{"opening_hook":"","hook_variants":["",""],"acts":[{"name":"","summary":""}],"ending":""},
+"shots":[{"id":"S1","act":"name of an act","duration_seconds":3,"tool":"","prompt":"","dialogue":"","voiceover":"","sound":"","on_screen_text":"","transition":"cut"}],
+"posting":{"title":"","title_variants":["",""],"caption":"","hashtags":["#"],"thumbnail_prompt":""}}
+Use "series": null unless the format is series_episode.`;
+}
+
+function seriesList() {
+  const map = new Map();
+  for (const b of DATA.series) map.set(b.title, { title: b.title, season_arc: b.season_arc, characters: b.characters, episodes: b.episodes.map((e) => ({ ...e })) });
+  for (const s of allScripts()) {
+    const sr = s.package.series; if (!sr || !sr.title) continue;
+    const entry = map.get(sr.title) || { title: sr.title, season_arc: sr.season_arc, characters: s.package.characters, episodes: [] };
+    if (!entry.episodes.some((e) => e.number === sr.episode_number)) entry.episodes.push({ number: sr.episode_number, title: s.package.title, summary: s.package.logline, cliffhanger: sr.cliffhanger });
+    map.set(sr.title, entry);
+  }
+  for (const e of map.values()) e.episodes.sort((a, b) => a.number - b.number);
+  return [...map.values()];
+}
+
+function request() {
+  const lines = [];
+  if (draft.kind.startsWith("next:")) {
+    const s = seriesList().find((x) => x.title === draft.kind.slice(5));
+    const next = (s.episodes.at(-1)?.number || 0) + 1;
+    lines.push(`Write episode ${next} of the existing series "${s.title}" (format series_episode).`, `Season arc: ${s.season_arc}`,
+      "Episodes so far:", ...s.episodes.map((e) => `${e.number}. ${e.title}: ${e.summary} Cliffhanger: ${e.cliffhanger}`),
+      "Use these characters with exactly these ids and visual_blocks (you may add one new character):", JSON.stringify(s.characters.map(({ reference_image_prompt, ...c }) => c)),
+      "Pick up from the last cliffhanger and summarise it in \"previously\".");
+  } else {
+    lines.push(`Write a new ${draft.kind.replace("_", " ")}${draft.kind === "series_episode" ? " that is episode 1 of a new series" : ""}.`);
+  }
+  lines.push(`Target runtime: about ${draft.seconds} seconds. Language for dialogue, voiceover, on-screen text, title and caption: ${draft.language}. Write the visual prompts in English.`);
+  lines.push(draft.idea.trim() ? `The idea to build on: ${draft.idea.trim()}` : "Choose the idea yourself from what the trend scan supports best.");
+  return lines.join("\n");
+}
+
+async function generate(input, source) {
+  busy = "Asking Claude…"; notice = ""; render();
+  const status = (text) => { busy = text; const el = document.getElementById("status"); if (el) el.textContent = text; };
+  const opts = { modelTier: draft.tier, cache: false, onText: ({ text }) => status(`Claude is writing… ${num(text.length)} characters`) };
+  try {
+    let pkg = normalise(await ask.json(input, opts));
+    let result = review(pkg);
+    if (result.errors.length) {
+      status("Fixing limits the first draft broke…");
+      pkg = normalise(await ask.json(`${brief()}\n\nThis script package breaks these rules:\n${result.errors.map((e) => "- " + e).join("\n")}\n\nFix them and reply with the full corrected JSON object.\n\n${JSON.stringify(collapse(pkg))}`, opts));
+      result = review(pkg);
+    }
+    const id = `${new Date().toISOString().slice(0, 10)}-${slug(pkg.title)}-${Date.now().toString(36).slice(-4)}`;
+    const entry = { id, package: pkg, created: Date.now(), source };
+    if (db) await db.collection("scripts").doc(id).set({ package: pkg, created: entry.created, source });
+    else appScripts = [entry, ...appScripts];
+    selected = id; busy = null; draft.idea = ""; draft.change = "";
+    notice = result.errors.length ? "Saved, but it still breaks a limit. See the notes at the top of the script." : "";
+    location.hash = "scripts"; render(); scrollTo(0, 0);
+  } catch (e) {
+    busy = null;
+    notice = ({ not_granted: "Claude access was not allowed for this page, so nothing was written.", rate_limited: "You have hit a usage limit. Wait a while and try again.",
+      invalid_json: "The answer was cut short or was not a script. Try again, or ask for a shorter video.", cancelled: "Stopped." })[e && e.code] || (e && e.message) || "Something went wrong. Try again.";
+    render();
+  }
+}
+
+/* ---------- small renderers ---------- */
+function inline(text) {
+  const out = []; const pattern = /\*\*(.+?)\*\*|\[([^\]]+)\]\((https?:[^)]+)\)/g; let last = 0, m;
+  while ((m = pattern.exec(text))) { if (m.index > last) out.push(text.slice(last, m.index));
+    out.push(m[1] ? h("strong", {}, m[1]) : h("a", { href: m[3], target: "_blank", rel: "noopener" }, m[2])); last = pattern.lastIndex; }
   if (last < text.length) out.push(text.slice(last));
   return out;
 }
-
 function markdown(text) {
-  const box = h("div", { class: "notes" });
-  let list = null;
+  const box = h("div", { class: "notes" }); let list = null;
   for (const raw of text.split("\n")) {
-    const line = raw.trim();
-    const bullet = line.match(/^(?:-|\d+\.)\s+(.*)/);
+    const line = raw.trim(); const bullet = line.match(/^(?:-|\d+\.)\s+(.*)/);
     if (bullet) { if (!list) { list = h("ul"); box.append(list); } list.append(h("li", {}, inline(bullet[1]))); continue; }
-    list = null;
-    if (!line) continue;
-    if (line.startsWith("### ")) box.append(h("h3", {}, line.slice(4)));
-    else if (!line.startsWith("## ")) box.append(h("p", {}, inline(line)));
+    list = null; if (!line) continue;
+    if (line.startsWith("### ")) box.append(h("h3", {}, line.slice(4))); else if (!line.startsWith("## ")) box.append(h("p", {}, inline(line)));
   }
   return box;
 }
-
 function copyBlock(text) {
   const pre = h("pre", {}, text);
   const button = h("button", { class: "copy", type: "button", onclick: async () => {
@@ -166,112 +346,130 @@ function copyBlock(text) {
   } }, "Copy");
   return h("div", { class: "prompt" }, pre, button);
 }
-
 function table(headers, rows) {
   return h("div", { class: "scroll" }, h("table", {},
     h("thead", {}, h("tr", {}, headers.map(([text, cls]) => h("th", { class: cls }, text)))),
     h("tbody", {}, rows.map((cells) => h("tr", {}, cells.map((cell, i) => h("td", { class: headers[i][1] }, cell)))))));
 }
+const allScripts = () => [...[...appScripts].sort((a, b) => b.created - a.created), ...DATA.scripts.map((s) => ({ id: s.folder, package: s.package, source: "repo" }))];
 
+/* ---------- views ---------- */
 function scriptView() {
-  if (!DATA.scripts.length) return [h("p", { class: "empty" }, "No scripts yet. Ask for one in the Claude session and this page will show it after the next update.")];
-  const entry = DATA.scripts.find((s) => s.folder === selected) || DATA.scripts[0];
-  const p = entry.package;
+  const scripts = allScripts();
+  if (!scripts.length) return [h("p", { class: "empty" }, "No scripts yet. Open Create to write the first one.")];
+  const entry = scripts.find((s) => s.id === selected) || scripts[0];
+  const p = entry.package, r = review(p);
   const names = Object.fromEntries(p.characters.map((c) => [c.id, c.name]));
-  const total = p.shots.reduce((sum, s) => sum + s.duration_seconds, 0);
-  const picker = h("div", { class: "picker" }, DATA.scripts.map((s) => h("button", {
-    class: "pick", type: "button", "aria-pressed": String(s === entry),
-    onclick: () => { selected = s.folder; render(); } },
+  const picker = h("div", { class: "picker" }, scripts.map((s) => { const q = review(s.package); return h("button", {
+    class: "pick", type: "button", "aria-pressed": String(s === entry), onclick: () => { selected = s.id; removing = null; render(); } },
     h("b", {}, s.package.title),
-    h("span", {}, `${s.package.format.replace("_", " ")} · ${clock(s.runtime)} · ${s.package.shots.length} shots · ${s.days} day${s.days === 1 ? "" : "s"} of credits`))));
+    h("span", {}, `${s.package.format.replace("_", " ")} · ${clock(q.runtime)} · ${s.package.shots.length} shots · ${q.daysNeeded} day${q.daysNeeded === 1 ? "" : "s"} of credits${s.source === "repo" ? "" : " · made here"}`)); }));
 
-  let at = 0;
+  let at = 0; const shots = [];
   const strip = h("div", { class: "strip", role: "img", "aria-label": "Shots to scale, coloured by video tool" });
-  const shots = [];
   for (const s of p.shots) {
     const anchor = "shot-" + s.id;
     strip.append(h("a", { href: "#", style: `flex-grow:${s.duration_seconds};--hue:${hue(s.tool)}`, title: `${s.id} · ${s.duration_seconds}s · ${label(s.tool)}`,
       onclick: (e) => { e.preventDefault(); document.getElementById(anchor).scrollIntoView({ behavior: "smooth" }); } }, s.id));
-    const cues = [["Dialogue", s.dialogue], ["Voiceover", s.voiceover], ["Sound", s.sound], ["On screen", s.on_screen_text], ["Cut", s.transition !== "cut" && s.transition]]
-      .filter(([, v]) => v);
+    const cues = [["Dialogue", s.dialogue], ["Voiceover", s.voiceover], ["Sound", s.sound], ["On screen", s.on_screen_text], ["Cut", s.transition !== "cut" && s.transition]].filter(([, v]) => v);
     shots.push(h("article", { class: "shot", id: anchor, style: `--hue:${hue(s.tool)}` },
-      h("div", { class: "slate" },
-        h("span", { class: "id" }, s.id), h("span", {}, `${clock(at)}–${clock(at + s.duration_seconds)}`), h("span", {}, `${s.duration_seconds}s`),
-        h("span", { class: "chip tool" }, label(s.tool)),
-        h("span", { class: "who" }, [s.act, ...s.characters.map((c) => names[c] || c)].join(" · "))),
+      h("div", { class: "slate" }, h("span", { class: "id" }, s.id), h("span", {}, `${clock(at)}–${clock(at + s.duration_seconds)}`), h("span", {}, `${s.duration_seconds}s`),
+        h("span", { class: "chip tool" }, label(s.tool)), h("span", { class: "who" }, [s.act, ...s.characters.map((c) => names[c] || c)].filter(Boolean).join(" · "))),
       copyBlock(s.prompt),
       cues.length ? h("dl", { class: "cues" }, cues.map(([k, v]) => [h("dt", {}, k), h("dd", {}, v)])) : null));
     at += s.duration_seconds;
   }
-  const used = [...new Set(p.shots.map((s) => s.tool))];
+  const manage = h("section", {}, h("h2", {}, "Change this script"),
+    ask ? h("div", { class: "panel" },
+      h("label", { for: "change" }, "What should be different?"),
+      h("textarea", { id: "change", rows: "3", placeholder: "Make the ending funnier, cut it to 45 seconds, set it in Jaipur…", value: draft.change, oninput: (e) => { draft.change = e.target.value; } }),
+      h("div", { class: "row" },
+        h("button", { class: "primary", type: "button", disabled: !!busy, onclick: () => { if (!draft.change.trim()) return;
+          const change = draft.change.trim();
+          generate(`${brief()}\n\nHere is an existing script package. Apply this change and reply with the full updated JSON object, keeping everything else:\n${change}\n\n${JSON.stringify(collapse(p))}`, "app"); } }, "Save as a new version"),
+        h("span", { class: "muted", id: "status" }, busy || "Uses your Claude plan. The original stays as it is.")))
+      : h("p", { class: "muted" }, ready ? "Changing scripts needs Claude access, which this view does not have." : "Connecting to Claude…"),
+    entry.source !== "repo" ? h("div", { class: "row" },
+      removing === entry.id
+        ? [h("button", { class: "danger", type: "button", onclick: async () => { removing = null; if (db) await db.collection("scripts").doc(entry.id).delete().catch(() => {}); else appScripts = appScripts.filter((s) => s.id !== entry.id); selected = null; render(); } }, "Yes, delete it"),
+           h("button", { type: "button", class: "plain", onclick: () => { removing = null; render(); } }, "Keep it")]
+        : h("button", { type: "button", class: "plain", onclick: () => { removing = entry.id; render(); } }, "Delete this script")) : null);
 
   return [
     h("section", {}, h("div", { class: "eyebrow" }, "Scripts"), picker),
-    h("section", {},
-      h("h1", {}, p.title), h("p", { class: "muted" }, p.logline),
-      h("div", { class: "meta" }, [p.format.replace("_", " "), p.aspect_ratio, clock(total), `${p.shots.length} shots`, p.platform].map((t) => h("span", { class: "chip" }, t))),
-      entry.warnings.map((w) => h("p", { class: "warn" }, "Check: " + w))),
-    h("section", {},
-      h("div", { class: "strip-wrap stack tight" }, strip, h("div", { class: "ruler" }, h("span", {}, "0:00"), h("span", {}, clock(total / 2)), h("span", {}, clock(total)))),
-      h("div", { class: "legend" }, used.map((t) => h("span", { style: `--hue:${hue(t)}` }, h("i"), `${label(t)}: ${entry.budget.clips[t]} clips, ${entry.budget.credits[t]} credits, ${entry.budget.days[t]} day${entry.budget.days[t] === 1 ? "" : "s"}`)))),
+    h("section", {}, h("h1", {}, p.title), h("p", { class: "muted" }, p.logline),
+      h("div", { class: "meta" }, [p.format.replace("_", " "), p.aspect_ratio, clock(r.runtime), `${p.shots.length} shots`, p.platform].map((t) => h("span", { class: "chip" }, t))),
+      r.errors.map((w) => h("p", { class: "warn" }, "Breaks a limit: " + w)), r.warnings.map((w) => h("p", { class: "warn" }, "Check: " + w))),
+    h("section", {}, h("div", { class: "stack tight" }, strip, h("div", { class: "ruler" }, h("span", {}, "0:00"), h("span", {}, clock(r.runtime / 2)), h("span", {}, clock(r.runtime)))),
+      h("div", { class: "legend" }, Object.keys(r.clips).map((t) => h("span", { style: `--hue:${hue(t)}` }, h("i"), `${label(t)}: ${r.clips[t]} clips, ${r.credits[t]} credits, ${r.days[t]} day${r.days[t] === 1 ? "" : "s"}`)))),
     h("section", { class: "two" },
-      h("div", { class: "panel" }, h("h2", {}, "Why this video"),
-        h("ul", {}, p.trend_basis.map((t) => h("li", {}, t))),
-        h("p", {}, h("strong", {}, "Our twist: "), p.original_twist)),
-      h("div", { class: "panel" }, h("h2", {}, "Story"),
-        h("p", {}, h("strong", {}, "Opening: "), p.story.opening_hook),
-        p.story.acts.map((a) => h("p", {}, h("strong", {}, a.name + ": "), a.summary)),
-        h("p", {}, h("strong", {}, "Ending: "), p.story.ending),
+      h("div", { class: "panel" }, h("h2", {}, "Why this video"), h("ul", {}, p.trend_basis.map((t) => h("li", {}, t))), h("p", {}, h("strong", {}, "Our twist: "), p.original_twist)),
+      h("div", { class: "panel" }, h("h2", {}, "Story"), h("p", {}, h("strong", {}, "Opening: "), p.story.opening_hook),
+        p.story.acts.map((a) => h("p", {}, h("strong", {}, a.name + ": "), a.summary)), h("p", {}, h("strong", {}, "Ending: "), p.story.ending),
         p.series ? h("p", {}, h("strong", {}, "Cliffhanger: "), p.series.cliffhanger) : null)),
-    h("section", {}, h("h2", {}, "Other openings to test"), h("ul", {}, p.story.hook_variants.map((t) => h("li", {}, t)))),
+    p.story.hook_variants.length ? h("section", {}, h("h2", {}, "Other openings to test"), h("ul", {}, p.story.hook_variants.map((t) => h("li", {}, t)))) : null,
     h("section", {}, h("h2", {}, "Characters"), h("p", { class: "muted" }, "Make each reference image first, then attach it to every clip the character is in."),
-      h("div", { class: "two" }, p.characters.map((c) => h("div", { class: "panel" },
-        h("h3", {}, `${c.name} · ${c.role}`),
+      h("div", { class: "two" }, p.characters.map((c) => h("div", { class: "panel" }, h("h3", {}, `${c.name} · ${c.role}`),
         h("dl", { class: "kv" }, h("dt", {}, "Type"), h("dd", {}, c.archetype), h("dt", {}, "Personality"), h("dd", {}, c.personality), h("dt", {}, "Voice"), h("dd", {}, c.voice)),
         copyBlock(c.reference_image_prompt))))),
     h("section", {}, h("h2", {}, "Shots"), h("p", { class: "muted" }, "Generate in this order and paste each prompt exactly as written. Save each clip as its shot name, for example S1.mp4."), shots),
-    h("section", {}, h("h2", {}, "Posting pack"),
-      h("div", { class: "panel" },
-        h("p", {}, h("strong", {}, "Title: "), p.posting.title),
-        h("ul", {}, p.posting.title_variants.map((t) => h("li", {}, t))),
-        h("p", {}, h("strong", {}, "Caption: "), p.posting.caption),
-        h("div", { class: "meta" }, p.posting.hashtags.map((t) => h("span", { class: "chip" }, t))),
-        h("h3", {}, "Thumbnail prompt"), copyBlock(p.posting.thumbnail_prompt))),
+    h("section", {}, h("h2", {}, "Posting pack"), h("div", { class: "panel" }, h("p", {}, h("strong", {}, "Title: "), p.posting.title),
+      h("ul", {}, p.posting.title_variants.map((t) => h("li", {}, t))), h("p", {}, h("strong", {}, "Caption: "), p.posting.caption),
+      h("div", { class: "meta" }, p.posting.hashtags.map((t) => h("span", { class: "chip" }, t))), h("h3", {}, "Thumbnail prompt"), copyBlock(p.posting.thumbnail_prompt))),
+    manage,
   ];
 }
 
+function createView() {
+  const series = seriesList();
+  const kinds = [["series_episode", "New series, episode 1"], ["short", "One-off short"], ["solo_drama", "Solo drama"], ["long_video", "Long video"],
+    ...series.map((s) => ["next:" + s.title, `Next episode of ${s.title}`])];
+  const field = (id, text, control, hint) => h("div", { class: "field" }, h("label", { for: id }, text), control, hint ? h("span", { class: "muted small" }, hint) : null);
+  const defaults = { series_episode: 60, short: 40, solo_drama: 90, long_video: 300 };
+  const form = h("form", { class: "panel form", onsubmit: (e) => { e.preventDefault(); if (!busy && ask) generate(`${brief()}\n\nTHE JOB\n${request()}`, "app"); } },
+    field("kind", "What to write", h("select", { id: "kind", onchange: (e) => { draft.kind = e.target.value; draft.seconds = defaults[draft.kind] || 60; render(); } },
+      kinds.map(([v, t]) => h("option", { value: v, selected: v === draft.kind }, t)))),
+    field("idea", "Your idea", h("textarea", { id: "idea", rows: "4", placeholder: "Optional. A premise, a character, a scene you want in it.", value: draft.idea, oninput: (e) => { draft.idea = e.target.value; } }),
+      "Leave empty and Claude picks the idea the trend scan supports best."),
+    h("div", { class: "two" },
+      field("language", "Language", h("input", { id: "language", type: "text", value: draft.language, oninput: (e) => { draft.language = e.target.value; } }), "For dialogue, on-screen text, title and caption."),
+      field("seconds", "Length in seconds", h("input", { id: "seconds", type: "number", min: "15", max: "1800", value: String(draft.seconds), oninput: (e) => { draft.seconds = Number(e.target.value) || 60; } }),
+        "Free video credits make anything over about 3 minutes a multi-day job."),
+      field("tier", "Writing quality", h("select", { id: "tier", onchange: (e) => { draft.tier = e.target.value; } },
+        [["default", "Balanced"], ["complex", "Best, slower, uses more of your plan"]].map(([v, t]) => h("option", { value: v, selected: v === draft.tier }, t))))),
+    h("div", { class: "row" }, h("button", { class: "primary", type: "submit", disabled: !!busy || !ask }, busy ? "Writing…" : "Write the script"),
+      h("span", { class: "muted", id: "status", role: "status" }, busy || (ask ? "Takes a minute or two. Uses your Claude plan." : ready ? "Writing needs Claude access, which this view does not have. Open the page on claude.ai while signed in." : "Connecting to Claude…"))),
+    notice ? h("p", { class: "warn" }, notice) : null);
+  return [h("section", {}, h("div", { class: "eyebrow" }, "Create"), h("h1", {}, "Write a new script"),
+    h("p", { class: "muted" }, `Claude writes it from the ${DATA.trends ? DATA.trends.date : "latest"} trend scan, checks it against your video tools' clip lengths and daily credits, and saves it to Scripts.`), form)];
+}
+
 function seriesView() {
-  if (!DATA.series.length) return [h("p", { class: "empty" }, "No series recorded yet.")];
-  return DATA.series.map((b) => h("section", {},
-    h("h1", {}, b.title), h("p", { class: "muted" }, b.season_arc),
-    h("h2", {}, "Episodes"),
-    table([["Ep", "num"], ["Title", "title"], ["Summary", ""], ["Cliffhanger", ""]], b.episodes.map((e) => [String(e.number), e.title, e.summary, e.cliffhanger])),
-    h("h2", {}, "Fixed characters"),
-    h("div", { class: "two" }, b.characters.map((c) => h("div", { class: "panel" },
-      h("h3", {}, `${c.name} · ${c.role}`), h("p", { class: "muted" }, c.personality), copyBlock(c.visual_block))))));
+  const all = seriesList();
+  if (!all.length) return [h("p", { class: "empty" }, "No series yet.")];
+  return all.map((b) => h("section", {}, h("h1", {}, b.title), h("p", { class: "muted" }, b.season_arc),
+    h("div", { class: "row" }, h("button", { class: "primary", type: "button", onclick: () => { draft.kind = "next:" + b.title; draft.seconds = 60; location.hash = "create"; } }, "Write the next episode")),
+    h("h2", {}, "Episodes"), table([["Ep", "num"], ["Title", "title"], ["Summary", ""], ["Cliffhanger", ""]], b.episodes.map((e) => [String(e.number), e.title, e.summary, e.cliffhanger])),
+    h("h2", {}, "Fixed characters"), h("div", { class: "two" }, b.characters.map((c) => h("div", { class: "panel" }, h("h3", {}, `${c.name} · ${c.role}`), h("p", { class: "muted" }, c.personality), copyBlock(c.visual_block))))));
 }
 
 function videoTable(videos) {
   return table([["Views", "num"], ["Length", "num"], ["Title", "title"], ["Channel", ""]],
     videos.slice(0, 15).map((v) => [num(v.views), clock(v.duration_seconds), h("a", { href: v.url, target: "_blank", rel: "noopener" }, v.title), v.channel]));
 }
-
 function trendsView() {
   const t = DATA.trends;
   if (!t) return [h("p", { class: "empty" }, "No trend report yet.")];
   const a = t.analysis, s = t.shorts_analysis || {};
-  const out = [h("section", {},
-    h("div", { class: "eyebrow" }, `Trend report · ${t.date}`), h("h1", {}, t.niche),
-    h("p", { class: "muted" }, `YouTube videos uploaded in the last ${t.window}: ${num(a.video_count || 0)} long-form and ${num(s.video_count || 0)} under four minutes. Views are as of the scan.`))];
+  const out = [h("section", {}, h("div", { class: "eyebrow" }, `Trend report · ${t.date}`), h("h1", {}, t.niche),
+    h("p", { class: "muted" }, `YouTube videos uploaded in the last ${t.window}: ${num(a.video_count || 0)} long-form and ${num(s.video_count || 0)} under four minutes. Views are as of the scan. A new scan is run from the Claude session.`))];
   if (t.notes) out.push(h("section", {}, h("h2", {}, "What this means for us"), h("div", { class: "panel" }, markdown(t.notes))));
   if (a.video_count) {
-    out.push(h("section", {}, h("h2", {}, "Which searches are hottest"),
-      table([["Search", ""], ["Median views, long", "num"], ["Median views, short", "num"]],
-        a.queries.map((q) => [q.query, num(q.median_views), num(((s.queries || []).find((x) => x.query === q.query) || {}).median_views || 0)]))));
-    out.push(h("section", {}, h("h2", {}, "Title habits"),
-      table([["Habit", ""], ["Share, long", "num"], ["Median views", "num"], ["Share, short", "num"], ["Median views", "num"]],
-        a.title_patterns.map((p) => { const o = (s.title_patterns || []).find((x) => x.pattern === p.pattern) || {};
-          return [p.pattern, Math.round(p.share * 100) + "%", num(p.median_views), o.share ? Math.round(o.share * 100) + "%" : "–", o.median_views ? num(o.median_views) : "–"]; }))));
+    out.push(h("section", {}, h("h2", {}, "Which searches are hottest"), table([["Search", ""], ["Median views, long", "num"], ["Median views, short", "num"]],
+      a.queries.map((q) => [q.query, num(q.median_views), num(((s.queries || []).find((x) => x.query === q.query) || {}).median_views || 0)]))));
+    out.push(h("section", {}, h("h2", {}, "Title habits"), table([["Habit", ""], ["Share, long", "num"], ["Median views", "num"], ["Share, short", "num"], ["Median views", "num"]],
+      a.title_patterns.map((p) => { const o = (s.title_patterns || []).find((x) => x.pattern === p.pattern) || {};
+        return [p.pattern, Math.round(p.share * 100) + "%", num(p.median_views), o.share ? Math.round(o.share * 100) + "%" : "–", o.median_views ? num(o.median_views) : "–"]; }))));
     out.push(h("section", {}, h("h2", {}, "Top long-form videos"), videoTable(a.top_videos)));
   }
   if (s.video_count) out.push(h("section", {}, h("h2", {}, "Top videos under four minutes"), videoTable(s.top_videos)));
@@ -280,15 +478,26 @@ function trendsView() {
   return out;
 }
 
+function currentView() { return VIEWS.some(([id]) => id === location.hash.slice(1)) ? location.hash.slice(1) : "scripts"; }
 function render() {
-  const view = VIEWS.some(([id]) => id === location.hash.slice(1)) ? location.hash.slice(1) : "scripts";
-  const nav = document.getElementById("nav");
-  nav.replaceChildren(...VIEWS.map(([id, text]) => h("button", { type: "button", "aria-current": id === view ? "page" : null,
-    onclick: () => { location.hash = id; } }, text)));
-  const main = document.getElementById("main");
-  main.replaceChildren(...({ scripts: scriptView, series: seriesView, trends: trendsView })[view]());
+  const view = currentView();
+  document.getElementById("nav").replaceChildren(...VIEWS.map(([id, text]) => h("button", { type: "button", "aria-current": id === view ? "page" : null, onclick: () => { location.hash = id; } }, text)));
+  document.getElementById("main").replaceChildren(...({ scripts: scriptView, create: createView, series: seriesView, trends: trendsView })[view]().filter(Boolean));
 }
-document.getElementById("built").textContent = "updated " + DATA.built;
+document.getElementById("built").textContent = "trends and repo scripts as of " + DATA.built;
 addEventListener("hashchange", () => { render(); scrollTo(0, 0); });
 render();
+
+(async () => {
+  const use = (name) => (window.claude && window.claude.use ? window.claude.use(name).catch(() => null) : Promise.resolve(null));
+  [db, ask] = await Promise.all([use("db"), use("sample")]);
+  ready = true;
+  if (db) db.collection("scripts").onSnapshot((snap) => {
+    appScripts = snap.docs.map((d) => ({ id: d.id, ...d.data() })).filter((s) => s.package && Array.isArray(s.package.shots));
+    // Typing in a form must not be interrupted by a list refresh.
+    const typing = document.activeElement && ["TEXTAREA", "INPUT", "SELECT"].includes(document.activeElement.tagName);
+    if (!typing && !busy) render();
+  }, () => {});
+  if (!busy) { const typing = document.activeElement && ["TEXTAREA", "INPUT", "SELECT"].includes(document.activeElement.tagName); if (!typing) render(); }
+})();
 </script>

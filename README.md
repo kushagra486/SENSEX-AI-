@@ -31,14 +31,24 @@ prompts, every shot as a paste-ready prompt tagged with the tool to use, an
 edit timeline, a credit budget, and a title, caption and hashtags.
 See `examples/script.md`.
 
-## The web view
+## The web app
 
-Everything is also visible on one page, Sensex Studio:
-https://claude.ai/artifact/7fo36vcfSafnu75euxAWuN (private to you unless you
-share it). It shows every script with a copy button on each prompt, the series
-bibles, and the latest trend report. It is a viewer: you ask for new scripts
-in the Claude session, and Claude rebuilds and republishes the page.
-`uv run sensex site` builds it to `site/index.html`.
+Sensex Studio: https://claude.ai/artifact/7fo36vcfSafnu75euxAWuN (private to
+you unless you share it). It runs on your Claude plan; there is no API key.
+
+- **Create:** choose a format or "next episode of" a series, add an idea or
+  leave it empty, and Claude writes the script from the latest trend scan. The
+  page checks clip lengths and daily credits, asks Claude once to fix anything
+  that breaks them, and saves the script.
+- **Scripts:** every script, with a copy button on each prompt, and a box to
+  ask for a change, which saves a new version.
+- **Series** and **Trends:** the series bibles and the latest trend report.
+
+Two things still happen in a Claude Code session, not in the app: running a
+new trend scan (the page cannot reach YouTube) and cutting or assembling
+video. Scripts written in the app are stored with the page; a session can
+import them into this repo. `uv run sensex site` rebuilds the page to
+`site/index.html`.
 
 ## What you need to add
 
