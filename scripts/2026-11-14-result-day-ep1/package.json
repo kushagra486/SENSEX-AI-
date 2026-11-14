@@ -1,0 +1,254 @@
+{
+  "format": "series_episode",
+  "title": "Result Day, Ep 1: Chawal Ka Dabba",
+  "logline": "A daughter-in-law treated as the household help is secretly studying for the civil services exam at 4 a.m., until her mother-in-law finds the books hidden in the rice.",
+  "platform": "YouTube Shorts and Instagram Reels",
+  "aspect_ratio": "9:16",
+  "target_runtime_seconds": 69,
+  "trend_basis": [
+    "Family cruelty and payback dramas in Hindi and Urdu fill this week's top 'AI story' results (491K, 486K, 576K views)",
+    "Hidden-identity stories have the highest median views of any title habit in the scan, though from only five videos",
+    "Episode numbering appears in 22% of short videos; one-minute episodes fit India's micro-drama growth"
+  ],
+  "original_twist": "No villain's downfall and no secret millionaire: the hidden identity is a housewife who is a serious civil services aspirant, and each episode is one obstacle between her and exam day, told from inside an ordinary Lucknow kitchen.",
+  "series": {
+    "title": "Result Day",
+    "episode_number": 1,
+    "season_arc": "Six days to the exam and then the wait for the result: Meera has to reach the exam hall, and the family has to decide who she is to them.",
+    "previously": "",
+    "cliffhanger": "Sarla holds Meera's admit card over the gas flame as Meera walks in."
+  },
+  "characters": [
+    {
+      "id": "meera",
+      "name": "Meera",
+      "role": "protagonist",
+      "archetype": "quiet fighter",
+      "personality": "Patient, observant, proud, says little and remembers everything",
+      "voice": "Soft, steady young woman's voice, Hindi with a Lucknow politeness",
+      "visual_block": "Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles",
+      "reference_image_prompt": "Character reference photo, full body, front and three-quarter view, plain light grey background, realistic, soft even light. Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles."
+    },
+    {
+      "id": "sarla",
+      "name": "Sarla",
+      "role": "antagonist",
+      "archetype": "guardian of the old rules",
+      "personality": "Sharp-tongued, tired, afraid of losing control of her home, not cruel for its own sake",
+      "voice": "Dry, clipped older woman's voice",
+      "visual_block": "Sarla, a 58-year-old Indian woman with grey-streaked hair in a tight bun, round steel-rimmed spectacles, a stern mouth, wearing a white cotton saree with a thin blue border and a bunch of keys at her waist",
+      "reference_image_prompt": "Character reference photo, full body, front and three-quarter view, plain light grey background, realistic, soft even light. Sarla, a 58-year-old Indian woman with grey-streaked hair in a tight bun, round steel-rimmed spectacles, a stern mouth, wearing a white cotton saree with a thin blue border and a bunch of keys at her waist."
+    },
+    {
+      "id": "vikram",
+      "name": "Vikram",
+      "role": "husband",
+      "archetype": "absent ally",
+      "personality": "Distracted, conflict-avoiding, fond of Meera but never looks up",
+      "voice": "Mild, hurried male voice",
+      "visual_block": "Vikram, a 29-year-old Indian man with short side-parted hair, a thin moustache, wearing a light blue office shirt and a black laptop bag on one shoulder",
+      "reference_image_prompt": "Character reference photo, full body, front and three-quarter view, plain light grey background, realistic, soft even light. Vikram, a 29-year-old Indian man with short side-parted hair, a thin moustache, wearing a light blue office shirt and a black laptop bag on one shoulder."
+    }
+  ],
+  "story": {
+    "opening_hook": "At 4 a.m. a woman's hands bury a thick textbook inside the family's rice container.",
+    "hook_variants": [
+      "Open on the admit card held over the gas flame, freeze, then text: 'Baarah ghante pehle.'",
+      "Open on Sarla telling the neighbour 'ek roti gol nahi banti' while, behind her, Meera silently mouths an answer from memory."
+    ],
+    "acts": [
+      {
+        "name": "Hook",
+        "summary": "The book goes into the rice."
+      },
+      {
+        "name": "Secret",
+        "summary": "Meera studies before dawn and hides it when the house wakes."
+      },
+      {
+        "name": "House",
+        "summary": "A normal day: taunts from Sarla, a husband who does not look up."
+      },
+      {
+        "name": "Stakes",
+        "summary": "The exam is six days away and the admit card is folded in her saree."
+      },
+      {
+        "name": "Discovery",
+        "summary": "Sarla finds the books and the admit card."
+      }
+    ],
+    "ending": "Sarla holds the admit card above the flame and asks how this happened behind her back; Meera stands frozen in the doorway."
+  },
+  "shots": [
+    {
+      "id": "S1",
+      "act": "Hook",
+      "duration_seconds": 3,
+      "tool": "kaggle",
+      "characters": [],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Before dawn, dim blue light. Extreme close-up of a woman's hands pushing a thick textbook deep into a large steel rice container and covering it with rice grains. Glass bangles on her wrists. Slow push-in.",
+      "sound": "Rice grains shifting, a distant azaan",
+      "on_screen_text": "Subah 4 baje. Ghar mein kisi ko nahi pata.",
+      "transition": "cold open"
+    },
+    {
+      "id": "S2",
+      "act": "Secret",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [
+        "meera"
+      ],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Before dawn. Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles sits cross-legged on the kitchen floor reading handwritten notes by the light of a phone torch propped against a steel tin, lips moving silently. Low side angle, the rest of the house dark.",
+      "voiceover": "Meera: Is ghar ki bahu raat ko sirf bartan nahi maanjti.",
+      "sound": "A ceiling fan, pages turning"
+    },
+    {
+      "id": "S3",
+      "act": "Secret",
+      "duration_seconds": 4,
+      "tool": "kaggle",
+      "characters": [
+        "meera"
+      ],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Before dawn. Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles looks up sharply as a tube light flickers on in the corridor behind her, then slides her notes under a folded dish towel. Handheld, quick rack focus to the lit corridor.",
+      "sound": "A switch clicks, slippers on the floor"
+    },
+    {
+      "id": "S4",
+      "act": "House",
+      "duration_seconds": 8,
+      "tool": "veo",
+      "characters": [
+        "sarla",
+        "meera"
+      ],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Early morning. Sarla, a 58-year-old Indian woman with grey-streaked hair in a tight bun, round steel-rimmed spectacles, a stern mouth, wearing a white cotton saree with a thin blue border and a bunch of keys at her waist walks into the kitchen and stops, looking at the cold stove. She says sharply in Hindi: \"Chai abhi tak nahi bani? Maharani ki neend poori nahi hoti.\" In the background Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles lowers her eyes and lights the gas. Medium two-shot, static.",
+      "dialogue": "Sarla: Chai abhi tak nahi bani? Maharani ki neend poori nahi hoti."
+    },
+    {
+      "id": "S5",
+      "act": "House",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [
+        "meera"
+      ],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Morning. Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles serves parathas onto steel plates at a small dining table while three family members eat and watch a television off screen. Nobody looks at her. Slow sideways tracking shot.",
+      "voiceover": "Meera: Teen saal ho gaye. Kisi ne nahi poocha, tum kya banna chahti thi.",
+      "sound": "A TV news jingle, steel plates"
+    },
+    {
+      "id": "S6",
+      "act": "House",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [
+        "vikram"
+      ],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Morning. Vikram, a 29-year-old Indian man with short side-parted hair, a thin moustache, wearing a light blue office shirt and a black laptop bag on one shoulder takes a steel lunch box from a woman's outstretched hands without looking up from his phone and walks out of the front door. Medium shot from inside the house, her hands stay in frame.",
+      "voiceover": "Meera: Unhe tiffin yaad rehta hai. Main nahi.",
+      "sound": "A scooter starting outside"
+    },
+    {
+      "id": "S7",
+      "act": "House",
+      "duration_seconds": 8,
+      "tool": "veo",
+      "characters": [
+        "sarla"
+      ],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Late morning. Sarla, a 58-year-old Indian woman with grey-streaked hair in a tight bun, round steel-rimmed spectacles, a stern mouth, wearing a white cotton saree with a thin blue border and a bunch of keys at her waist leans on a balcony wall talking to a neighbour off screen, shaking her head. She says in Hindi: \"Padhi-likhi bahu laaye the. Ab dekho, ek roti gol nahi banti.\" Medium close-up, sunlit balcony with drying clothes.",
+      "dialogue": "Sarla: Padhi-likhi bahu laaye the. Ab dekho, ek roti gol nahi banti."
+    },
+    {
+      "id": "S8",
+      "act": "Stakes",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [
+        "meera"
+      ],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Afternoon on a rooftop terrace with clotheslines. Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles pauses while hanging a wet bedsheet, takes a folded printed paper from the waist of her saree, unfolds it and stares at it. Close-up over her shoulder, wind moving the sheet.",
+      "voiceover": "Meera: Chhe din. Bas chhe din aur.",
+      "on_screen_text": "Pariksha: 6 din baad",
+      "sound": "Wind, a pressure cooker whistle far away"
+    },
+    {
+      "id": "S9",
+      "act": "Stakes",
+      "duration_seconds": 4,
+      "tool": "kaggle",
+      "characters": [],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Afternoon. Close-up of a paper wall calendar in a kitchen, a date circled in red pen, a woman's finger with glass bangles touching the circle. Static shot.",
+      "sound": "A clock ticking"
+    },
+    {
+      "id": "S10",
+      "act": "Discovery",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [
+        "sarla"
+      ],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Evening kitchen, warm bulb light. Sarla, a 58-year-old Indian woman with grey-streaked hair in a tight bun, round steel-rimmed spectacles, a stern mouth, wearing a white cotton saree with a thin blue border and a bunch of keys at her waist scoops rice from a large steel container with a steel bowl; the bowl hits something hard and she frowns. Medium close-up on her face and hands.",
+      "sound": "Steel hitting something solid",
+      "on_screen_text": "Us shaam..."
+    },
+    {
+      "id": "S11",
+      "act": "Discovery",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [
+        "sarla"
+      ],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Evening kitchen, warm bulb light. Sarla, a 58-year-old Indian woman with grey-streaked hair in a tight bun, round steel-rimmed spectacles, a stern mouth, wearing a white cotton saree with a thin blue border and a bunch of keys at her waist pulls a thick textbook and a bundle of handwritten notes out of a steel rice container, rice grains falling off them. Close-up on the book in her hands, then her face hardening.",
+      "voiceover": "Sarla: Yeh... yeh kya hai?",
+      "sound": "Rice scattering on the floor"
+    },
+    {
+      "id": "S12",
+      "act": "Discovery",
+      "duration_seconds": 8,
+      "tool": "veo",
+      "characters": [
+        "sarla",
+        "meera"
+      ],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Evening kitchen, warm bulb light. Sarla, a 58-year-old Indian woman with grey-streaked hair in a tight bun, round steel-rimmed spectacles, a stern mouth, wearing a white cotton saree with a thin blue border and a bunch of keys at her waist stands at the stove holding a printed admit card a few inches above a lit gas flame. Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles appears in the doorway and freezes. Sarla says in Hindi, cold and quiet: \"Yeh sab mere ghar mein, meri peeth peeche?\" Medium shot, the flame in the foreground.",
+      "dialogue": "Sarla: Yeh sab mere ghar mein, meri peeth peeche?",
+      "sound": "Gas flame hissing"
+    },
+    {
+      "id": "S13",
+      "act": "Discovery",
+      "duration_seconds": 4,
+      "tool": "kaggle",
+      "characters": [
+        "meera"
+      ],
+      "prompt": "Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Evening kitchen. Extreme close-up of Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles, eyes wide and fixed on something off screen, the orange light of a gas flame flickering on her face. Slow push-in.",
+      "on_screen_text": "Kal: Episode 2",
+      "sound": "Flame hiss, then silence",
+      "transition": "hard cut to black"
+    }
+  ],
+  "posting": {
+    "title": "Saas ko chawal ke dabbe mein kya mila? 😱 | Result Day, Part 1",
+    "title_variants": [
+      "Ghar ki bahu subah 4 baje kya chhupa rahi thi... | Result Day Part 1",
+      "'Ek roti gol nahi banti' — par woh afsar banne wali thi | Result Day Part 1"
+    ],
+    "caption": "Chhe din baad pariksha hai. Aur admit card ab saas ke haath mein hai. Part 2 kal.",
+    "hashtags": [
+      "#hindistory",
+      "#aistory",
+      "#familydrama",
+      "#resultday",
+      "#shorts"
+    ],
+    "thumbnail_prompt": "Vertical thumbnail. Vertical 9:16, realistic cinematic Indian family drama, natural light, shallow depth of field, a modest middle-class home in Lucknow with a small kitchen, steel utensils and faded pastel walls. Sarla, a 58-year-old Indian woman with grey-streaked hair in a tight bun, round steel-rimmed spectacles, a stern mouth, wearing a white cotton saree with a thin blue border and a bunch of keys at her waist in the foreground holding a paper above a gas flame, and Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles in the doorway behind her, terrified. Clear dark space at the top for title text."
+  }
+}

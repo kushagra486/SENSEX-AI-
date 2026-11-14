@@ -1,0 +1,44 @@
+{
+  "title": "Result Day",
+  "season_arc": "Six days to the exam and then the wait for the result: Meera has to reach the exam hall, and the family has to decide who she is to them.",
+  "characters": [
+    {
+      "id": "meera",
+      "name": "Meera",
+      "role": "protagonist",
+      "archetype": "quiet fighter",
+      "personality": "Patient, observant, proud, says little and remembers everything",
+      "voice": "Soft, steady young woman's voice, Hindi with a Lucknow politeness",
+      "visual_block": "Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles",
+      "reference_image_prompt": "Character reference photo, full body, front and three-quarter view, plain light grey background, realistic, soft even light. Meera, a 24-year-old Indian woman with a long black braid, a small red bindi, tired dark eyes, wearing a plain mustard cotton saree with a maroon border and thin glass bangles."
+    },
+    {
+      "id": "sarla",
+      "name": "Sarla",
+      "role": "antagonist",
+      "archetype": "guardian of the old rules",
+      "personality": "Sharp-tongued, tired, afraid of losing control of her home, not cruel for its own sake",
+      "voice": "Dry, clipped older woman's voice",
+      "visual_block": "Sarla, a 58-year-old Indian woman with grey-streaked hair in a tight bun, round steel-rimmed spectacles, a stern mouth, wearing a white cotton saree with a thin blue border and a bunch of keys at her waist",
+      "reference_image_prompt": "Character reference photo, full body, front and three-quarter view, plain light grey background, realistic, soft even light. Sarla, a 58-year-old Indian woman with grey-streaked hair in a tight bun, round steel-rimmed spectacles, a stern mouth, wearing a white cotton saree with a thin blue border and a bunch of keys at her waist."
+    },
+    {
+      "id": "vikram",
+      "name": "Vikram",
+      "role": "husband",
+      "archetype": "absent ally",
+      "personality": "Distracted, conflict-avoiding, fond of Meera but never looks up",
+      "voice": "Mild, hurried male voice",
+      "visual_block": "Vikram, a 29-year-old Indian man with short side-parted hair, a thin moustache, wearing a light blue office shirt and a black laptop bag on one shoulder",
+      "reference_image_prompt": "Character reference photo, full body, front and three-quarter view, plain light grey background, realistic, soft even light. Vikram, a 29-year-old Indian man with short side-parted hair, a thin moustache, wearing a light blue office shirt and a black laptop bag on one shoulder."
+    }
+  ],
+  "episodes": [
+    {
+      "number": 1,
+      "title": "Result Day, Ep 1: Chawal Ka Dabba",
+      "summary": "A daughter-in-law treated as the household help is secretly studying for the civil services exam at 4 a.m., until her mother-in-law finds the books hidden in the rice.",
+      "cliffhanger": "Sarla holds Meera's admit card over the gas flame as Meera walks in."
+    }
+  ]
+}

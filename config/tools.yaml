@@ -32,3 +32,10 @@ tools:
     daily_credits: 5        # a guess: the free GPU allowance is a few minutes a day
     has_audio: false
     reference_images: true
+  kaggle:
+    label: "Kaggle (free, automatic)"
+    max_clip_seconds: 5
+    credits_per_clip: 1
+    daily_credits: 40       # a guess from about 30 free GPU hours a week; not yet measured
+    has_audio: false
+    reference_images: true
