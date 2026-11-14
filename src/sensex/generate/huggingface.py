@@ -1,9 +1,11 @@
-"""Free clip generation through public Hugging Face Spaces.
+"""Free generation through public Hugging Face Spaces.
 
-Two steps per shot: a still first frame from the shot prompt, then a short
-silent video animated from that frame. Both run on Hugging Face's shared free
-GPUs, which allow only a few minutes of use per day and can refuse or queue
-requests. Set HF_TOKEN to use your own account's daily quota.
+Per shot: a still first frame (edited from a character's reference image when
+the shot has a character, so they look the same every time), a short silent
+video animated from that frame, and a spoken line cloned from the speaker's
+voice sample. Everything runs on Hugging Face's shared free GPUs, which allow
+only a few minutes of use per day and can refuse or queue requests. Set
+HF_TOKEN to use your own account's daily quota.
 """
 
 import os
@@ -13,7 +15,9 @@ from pathlib import Path
 from gradio_client import Client, handle_file
 
 IMAGE_SPACE = "mcp-tools/Qwen-Image-Fast"
+EDIT_SPACE = "mcp-tools/FLUX.1-Kontext-Dev"
 VIDEO_SPACE = "zerogpu-aoti/wan2-2-fp8da-aoti-faster"
+VOICE_SPACE = "ResembleAI/Chatterbox"
 MAX_CLIP_SECONDS = 5  # longer clips cost more of the daily GPU allowance and drift off-model
 
 
@@ -37,6 +41,38 @@ def _explain(error: Exception, space: str) -> GenerationError:
             f"HF_TOKEN to use your own Hugging Face account's allowance. ({text[:200]})"
         )
     return GenerationError(f"{space} failed: {text[:300]}")
+
+
+def _save(result, out: Path) -> Path:
+    path = result["path"] if isinstance(result, dict) else result
+    out.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy(path, out)
+    return out
+
+
+def _run(space: str, **arguments):
+    try:
+        return _client(space).predict(**arguments)
+    except GenerationError:
+        raise
+    except Exception as error:
+        raise _explain(error, space) from error
+
+
+def edit_frame(reference: Path, prompt: str, out: Path) -> Path:
+    """A new still showing the character from `reference` in the scene the prompt describes."""
+    result = _run(EDIT_SPACE, input_image=handle_file(str(reference)),
+                  prompt="The same character as in the image, unchanged in looks and clothing. " + prompt,
+                  api_name="/infer")
+    return _save(result[0], out)
+
+
+def speak(text: str, out: Path, voice_sample: Path | None = None) -> Path:
+    """The line spoken aloud, in the voice of `voice_sample` when one is given."""
+    result = _run(VOICE_SPACE, text_input=text,
+                  audio_prompt_path_input=handle_file(str(voice_sample)) if voice_sample else None,
+                  api_name="/generate_tts_audio")
+    return _save(result, out)
 
 
 def make_frame(prompt: str, out: Path, aspect_ratio: str = "9:16", seed: int | None = None) -> Path:

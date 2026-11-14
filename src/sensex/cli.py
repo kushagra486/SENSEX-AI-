@@ -17,6 +17,7 @@ from sensex.script import series as script_series
 from sensex.script.render import render
 from sensex import site as site_builder
 from sensex.generate import huggingface
+from sensex.generate import shots as generate_shots
 from sensex.trends import analyze, sources
 
 
@@ -161,23 +162,15 @@ def run_gen(args: argparse.Namespace) -> int:
         print(f"No such shot(s): {', '.join(unknown)}. This script has {', '.join(shots)}.")
         return 1
     for shot_id in wanted:
-        shot = shots[shot_id]
-        clip = args.folder / "clips" / f"{shot_id}.mp4"
-        if clip.exists() and not args.redo:
-            print(f"{shot_id}: already generated, skipped (use --redo to replace).")
-            continue
         try:
-            frame = huggingface.make_frame(shot.prompt, args.folder / "frames" / f"{shot_id}.png",
-                                           package.aspect_ratio)
-            huggingface.animate(frame, shot.prompt, shot.duration_seconds, clip)
+            notes = generate_shots.generate_shot(
+                package, shots[shot_id], args.folder, redo=args.redo,
+                video=not args.voice_only, voice=not args.skip_voice)
         except huggingface.GenerationError as error:
             print(f"{shot_id}: FAILED. {error}")
+            print("Files made so far are kept; run the same command again to continue.")
             return 1
-        note = ""
-        if shot.duration_seconds > huggingface.MAX_CLIP_SECONDS:
-            note = (f" It is {huggingface.MAX_CLIP_SECONDS}s, shorter than the {shot.duration_seconds:g}s "
-                    "shot; assembly holds the last frame for the rest.")
-        print(f"{shot_id}: wrote {clip}.{note}")
+        print(f"{shot_id}: " + ("; ".join(notes) or "nothing to do"))
     return 0
 
 
@@ -259,7 +252,9 @@ def main() -> int:
     gen = commands.add_parser("gen", help="Generate clips for a script on free Hugging Face Spaces.")
     gen.add_argument("folder", type=Path, help="Script folder holding package.json.")
     gen.add_argument("shots", nargs="*", help="Shot ids to generate; all shots if omitted.")
-    gen.add_argument("--redo", action="store_true", help="Replace clips that already exist.")
+    gen.add_argument("--redo", action="store_true", help="Replace files that already exist.")
+    gen.add_argument("--voice-only", action="store_true", help="Only make the spoken lines.")
+    gen.add_argument("--skip-voice", action="store_true", help="Only make frames and clips.")
     gen.set_defaults(run=run_gen)
 
     site = commands.add_parser("site", help="Build the web view of scripts, series and trends.")

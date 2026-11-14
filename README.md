@@ -93,29 +93,37 @@ uv run sensex trends [--window week|month]
 uv run sensex check scripts/<folder>/package.json
 uv run sensex render scripts/<folder>/package.json
 uv run sensex series record scripts/<folder>/package.json
-uv run sensex gen scripts/<folder> [shot ids]
+uv run sensex gen scripts/<folder> [shot ids] [--voice-only | --skip-voice] [--redo]
 uv run sensex assemble scripts/<folder>
 uv run sensex clips find media/<file> [--min 20 --max 60]
 uv run sensex clips cut media/<file> clips/<name>/plan.json
 uv run pytest
 ```
 
-## Generating clips for free (Hugging Face)
+## Generating the video for free (Hugging Face)
 
-`uv run sensex gen scripts/<folder> [S1 S2 ...]` makes clips without pasting
-anything: for each shot it creates a still first frame, then animates it,
-using public Hugging Face Spaces, and saves `clips/S1.mp4` and so on, ready
-for `assemble`. Limits: clips are silent, at most 5 seconds, and the free GPU
-allowance covers only a few clips a day. Clips come out at 480x832 and are
-scaled up when assembled.
+`uv run sensex gen scripts/<folder> [S1 S2 ...]` makes, for each shot:
 
-It needs your Hugging Face token. In a Claude cloud session, save the token as
-a network secret for the two Space hosts (`mcp-tools-qwen-image-fast.hf.space`
-and `zerogpu-aoti-wan2-2-fp8da-aoti-faster.hf.space`); on your own computer,
-set the `HF_TOKEN` environment variable. Without a token the shared anonymous
-allowance is usually already used up. The first frame and the clip are
-generated from the same shot prompt, so a character can look slightly
-different from shot to shot.
+- a reference image per character (once per series, in `series/<name>/refs/`)
+- a still first frame, edited from the reference so the character looks the
+  same in every shot
+- a silent clip of up to 5 seconds, saved as `clips/S1.mp4`
+- the spoken line as `audio/S1.wav`, in a voice cloned from that speaker's
+  first line (`series/<name>/voices/`)
+
+Then `assemble` joins everything. It all runs on public Hugging Face Spaces
+and needs your Hugging Face token: in a Claude cloud session, saved as a
+network secret for each Space host (image, character editor, video, voice);
+on your own computer, as the `HF_TOKEN` environment variable.
+
+The free daily GPU allowance is small. On the first real run it covered two
+clips with their frames and one character reference, then refused until the
+next day. Hugging Face PRO raises it to 40 minutes a day. The command skips
+files that already exist, so run it again each day to continue.
+
+Other routes: ElevenLabs (connected) can do voices, music and images but its
+video generation needs a paid plan; the free websites (Dreamina, Kling, Google
+Flow) have the most free clips but only by pasting prompts by hand.
 
 ## Posting
 
