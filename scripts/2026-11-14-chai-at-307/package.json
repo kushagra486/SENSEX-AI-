@@ -56,7 +56,11 @@
         "summary": "He laughs it off, walks back toward his truck, and sees it drive past with himself inside."
       }
     ],
-    "ending": "Kabir stands frozen at the stall holding the glass as his own truck's tail lights vanish toward the broken bridge. Noor says only: 'Now you believe me.'"
+    "ending": "Kabir stands frozen at the stall holding the glass as his own truck's tail lights vanish toward the broken bridge. Noor says only: 'Now you believe me.'",
+    "hook_variants": [
+      "Open on Kabir's own truck roaring past with Kabir at the wheel, freeze, then text: 'One minute earlier.'",
+      "Open on Noor sliding the glass across the counter: 'Your tea, Kabir.' before we know who either of them is."
+    ]
   },
   "shots": [
     {
@@ -156,6 +160,10 @@
       "#chaiat307",
       "#shorts"
     ],
-    "thumbnail_prompt": "Vertical thumbnail. Vertical 9:16, cinematic realism, film grain, night on a foggy Himalayan mountain highway, cold blue moonlight with warm orange lantern glow. Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt in the foreground, terrified, lit by headlights, a glowing tin-roofed tea stall behind him with the silhouette of a young woman. Clear dark space at the top for title text."
+    "thumbnail_prompt": "Vertical thumbnail. Vertical 9:16, cinematic realism, film grain, night on a foggy Himalayan mountain highway, cold blue moonlight with warm orange lantern glow. Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt in the foreground, terrified, lit by headlights, a glowing tin-roofed tea stall behind him with the silhouette of a young woman. Clear dark space at the top for title text.",
+    "title_variants": [
+      "This tea stall only appears at 3:07 AM. Don't leave before 3:08. | Chai at 3:07, Part 1",
+      "A stranger knew his name, his tea, and the minute he would die | Chai at 3:07, Part 1"
+    ]
   }
 }

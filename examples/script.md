@@ -20,6 +20,10 @@
 
 **Opening hook (first 3 seconds):** A parcel on a rainy doorstep starts ticking, with the label reading a name crossed out in red.
 
+**Other openings to test:**
+- Open on Mira's shocked face lit by the house lights, then cut back to the doorstep: 'Ten minutes earlier.'
+- Open on the robot saying 'Recipient is inside' while pointing its lens at a boarded-up door.
+
 **Hook:** The ticking parcel and the dead man's name.
 
 **Build:** Mira argues with Tik about opening it; the house has been empty for years.
@@ -149,6 +153,10 @@ Vertical 9:16, cinematic realism, night, heavy rain. Close-up of a faded photogr
 ## Posting pack
 
 **Title:** She delivered a parcel to a dead man... then opened it | The Last Delivery Ep 1
+
+**Other titles to test:**
+- The parcel was addressed to a man who died 10 years ago | The Last Delivery Ep 1
+- Her delivery robot refused to leave... then she saw why | The Last Delivery Ep 1
 
 **Caption:** Would you open it? Ep 2 drops tomorrow.
 

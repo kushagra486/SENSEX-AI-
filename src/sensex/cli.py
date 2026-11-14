@@ -16,17 +16,23 @@ from sensex.script.render import render
 from sensex.trends import analyze, sources
 
 
+NOTES_HEADING = "## What this means for us"
+
+
 def run_trends(args: argparse.Namespace) -> int:
     config = load_channel()
     window = args.window or config.scan.window
     videos: list[dict] = []
+    shorts: list[dict] = []
     errors: list[str] = []
     for query in config.queries:
-        print(f"Scanning YouTube: {query}", file=sys.stderr)
-        try:
-            videos += sources.youtube_top_videos(query, window, config.scan.results_per_query)
-        except Exception as error:  # one failed search must not lose the others
-            errors.append(f"{query}: {error}")
+        for short, found in ((False, videos), (True, shorts)):
+            print(f"Scanning YouTube{' short videos' if short else ''}: {query}", file=sys.stderr)
+            try:
+                found += sources.youtube_top_videos(
+                    query, window, config.scan.results_per_query, short=short)
+            except Exception as error:  # one failed search must not lose the others
+                errors.append(f"{query}{' (short videos)' if short else ''}: {error}")
     try:
         trending = sources.google_trending_searches(config.channel.region)
     except Exception as error:
@@ -40,14 +46,26 @@ def run_trends(args: argparse.Namespace) -> int:
         "window": window,
         "errors": errors,
         "analysis": analyze.analyze(videos),
+        "shorts_analysis": analyze.analyze(shorts),
         "trending_searches": trending,
     }
     out_dir = ROOT / "data" / "trends"
     out_dir.mkdir(parents=True, exist_ok=True)
+    earlier = sorted(path for path in out_dir.glob("*.json") if path.stem < report["date"])
+    if earlier:
+        previous = json.loads(earlier[-1].read_text(encoding="utf-8"))
+        report["compared_with"] = previous["date"]
+        report["rising_words"] = analyze.rising_words(report["analysis"], previous["analysis"])
     json_path = out_dir / f"{report['date']}.json"
     md_path = out_dir / f"{report['date']}.md"
     json_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
-    md_path.write_text(analyze.to_markdown(report), encoding="utf-8")
+    # Keep the written analysis from an earlier run today; only the numbers are regenerated.
+    notes = ""
+    if md_path.exists():
+        existing = md_path.read_text(encoding="utf-8")
+        if NOTES_HEADING in existing:
+            notes = "\n" + existing[existing.index(NOTES_HEADING):]
+    md_path.write_text(analyze.to_markdown(report) + notes, encoding="utf-8")
     print(f"Wrote {md_path.relative_to(ROOT)} and {json_path.relative_to(ROOT)}")
     for error in errors:
         print(f"FAILED: {error}", file=sys.stderr)

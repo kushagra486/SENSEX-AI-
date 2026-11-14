@@ -55,7 +55,11 @@
         "summary": "She opens it."
       }
     ],
-    "ending": "Mira stares at a photo of herself as a child, stamped with next week's date, as the house lights switch on behind her."
+    "ending": "Mira stares at a photo of herself as a child, stamped with next week's date, as the house lights switch on behind her.",
+    "hook_variants": [
+      "Open on Mira's shocked face lit by the house lights, then cut back to the doorstep: 'Ten minutes earlier.'",
+      "Open on the robot saying 'Recipient is inside' while pointing its lens at a boarded-up door."
+    ]
   },
   "shots": [
     {
@@ -139,6 +143,10 @@
       "#thelastdelivery",
       "#aiseries"
     ],
-    "thumbnail_prompt": "Vertical thumbnail, cinematic realism, rain at night. Mira, a 19-year-old Indian woman with a short black bob haircut, a thin scar through her left eyebrow, wearing an oversized yellow raincoat over a grey hoodie holding a glowing parcel, terrified, an abandoned house with one lit window behind her. Bold empty space at the top for text."
+    "thumbnail_prompt": "Vertical thumbnail, cinematic realism, rain at night. Mira, a 19-year-old Indian woman with a short black bob haircut, a thin scar through her left eyebrow, wearing an oversized yellow raincoat over a grey hoodie holding a glowing parcel, terrified, an abandoned house with one lit window behind her. Bold empty space at the top for text.",
+    "title_variants": [
+      "The parcel was addressed to a man who died 10 years ago | The Last Delivery Ep 1",
+      "Her delivery robot refused to leave... then she saw why | The Last Delivery Ep 1"
+    ]
   }
 }

@@ -95,3 +95,18 @@ def test_render_contains_prompts_timeline_and_posting():
 def test_missing_required_field_fails_validation():
     with pytest.raises(Exception):
         build(lambda data: data.pop("original_twist"))
+
+
+def test_long_opening_shot_warns():
+    def slow_open(data):
+        data["shots"][0]["duration_seconds"] = 6
+        data["target_runtime_seconds"] = 44
+    result = check(build(slow_open), TOOLS)
+    assert any("opening shot" in warning for warning in result.warnings)
+
+
+def test_render_lists_hook_and_title_variants():
+    package = build()
+    text = render(package, TOOLS)
+    assert package.story.hook_variants[0] in text
+    assert package.posting.title_variants[1] in text

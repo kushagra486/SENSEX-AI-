@@ -22,6 +22,7 @@ RUNTIME_RANGE: dict[str, tuple[int, int]] = {
     "long_video": (300, 1800),
 }
 RUNTIME_TOLERANCE = 0.15
+MAX_HOOK_SHOT_SECONDS = 4
 
 
 class Character(BaseModel):
@@ -45,6 +46,10 @@ class Act(BaseModel):
 
 class Story(BaseModel):
     opening_hook: str = Field(min_length=10, description="What the viewer sees in the first 3 seconds.")
+    hook_variants: list[str] = Field(
+        min_length=2,
+        description="Other openings for the same video, to post as tests against the main hook.",
+    )
     acts: list[Act] = Field(min_length=1)
     ending: str = Field(min_length=10)
 
@@ -73,6 +78,7 @@ class Shot(BaseModel):
 
 class Posting(BaseModel):
     title: str
+    title_variants: list[str] = Field(min_length=2, description="Other titles to test.")
     caption: str
     hashtags: list[str]
     thumbnail_prompt: str
@@ -169,6 +175,13 @@ def check(package: ScriptPackage, tools: ToolsConfig) -> CheckResult:
                     f"Shot {shot.id}: prompt must contain {character.name}'s visual_block word "
                     "for word, or the character will look different in this clip."
                 )
+
+    first = package.shots[0]
+    if first.duration_seconds > MAX_HOOK_SHOT_SECONDS:
+        result.warnings.append(
+            f"Shot {first.id}: the opening shot is {first.duration_seconds:g}s. Viewers decide "
+            f"in the first few seconds; keep it to {MAX_HOOK_SHOT_SECONDS}s or less."
+        )
 
     used = {character_id for shot in package.shots for character_id in shot.characters}
     for character_id in characters.keys() - used:

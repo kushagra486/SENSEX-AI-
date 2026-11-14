@@ -8,12 +8,18 @@ import yt_dlp
 
 # YouTube search filters: videos only, sorted by view count, uploaded within the window.
 _WINDOW_FILTER = {"week": "CAMSBAgDEAE=", "month": "CAMSBAgEEAE="}
+# The same, limited to videos under four minutes: the closest search gets to Shorts.
+_SHORT_WINDOW_FILTER = {"week": "CAMSBggDEAEYAQ==", "month": "CAMSBggEEAEYAQ=="}
 _TRENDS_NS = {"ht": "https://trends.google.com/trending/rss"}
 
 
-def youtube_top_videos(query: str, window: str, limit: int) -> list[dict]:
-    """The most-viewed videos uploaded in the window for one search query."""
-    params = urllib.parse.urlencode({"search_query": query, "sp": _WINDOW_FILTER[window]})
+def youtube_top_videos(query: str, window: str, limit: int, short: bool = False) -> list[dict]:
+    """The most-viewed videos uploaded in the window for one search query.
+
+    With `short`, only videos under four minutes are returned.
+    """
+    filters = _SHORT_WINDOW_FILTER if short else _WINDOW_FILTER
+    params = urllib.parse.urlencode({"search_query": query, "sp": filters[window]})
     url = f"https://www.youtube.com/results?{params}"
     options = {"extract_flat": True, "quiet": True, "no_warnings": True, "playlistend": limit}
     with yt_dlp.YoutubeDL(options) as ydl:

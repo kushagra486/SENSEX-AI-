@@ -21,6 +21,10 @@
 
 **Opening hook (first 3 seconds):** A dashboard clock flips to 3:07 and a lit tea stall appears in the fog where there was only cliff a second ago.
 
+**Other openings to test:**
+- Open on Kabir's own truck roaring past with Kabir at the wheel, freeze, then text: 'One minute earlier.'
+- Open on Noor sliding the glass across the counter: 'Your tea, Kabir.' before we know who either of them is.
+
 **Hook:** The stall appears out of nothing at 3:07.
 
 **Warning:** Noor already has Kabir's tea poured and tells him not to leave before 3:08.
@@ -169,6 +173,10 @@ Vertical 9:16, cinematic realism, film grain, night on a foggy Himalayan mountai
 ## Posting pack
 
 **Title:** He stopped for chai at 3:07 AM... then saw HIMSELF drive past | Chai at 3:07, Part 1
+
+**Other titles to test:**
+- This tea stall only appears at 3:07 AM. Don't leave before 3:08. | Chai at 3:07, Part 1
+- A stranger knew his name, his tea, and the minute he would die | Chai at 3:07, Part 1
 
 **Caption:** The stall was never there before. Would you have stayed till 3:08? Part 2 tomorrow.
 

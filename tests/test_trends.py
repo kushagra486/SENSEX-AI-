@@ -58,3 +58,24 @@ def test_markdown_report_lists_videos_and_failures():
     assert "ai horror: timeout" in text
     assert "She Was the SECRET Daughter of a Dragon King?" in text
     assert "**ind vs aus** (500000+)" in text
+
+
+def test_rising_words_compares_with_previous_report():
+    from sensex.trends.analyze import rising_words
+    previous = {"title_words": [{"word": "horror", "videos": 5}, {"word": "dragon", "videos": 9}]}
+    current = {"title_words": [{"word": "horror", "videos": 12}, {"word": "dragon", "videos": 9},
+                               {"word": "diwali", "videos": 4}]}
+    assert rising_words(current, previous) == [
+        {"word": "horror", "now": 12, "before": 5},
+        {"word": "diwali", "now": 4, "before": 0},
+    ]
+
+
+def test_markdown_has_separate_short_video_section_and_rising_words():
+    report = {"date": "2026-11-15", "niche": "AI stories", "region": "IN", "window": "week",
+              "errors": [], "analysis": analyze(VIDEOS), "shorts_analysis": analyze(VIDEOS[:2]),
+              "compared_with": "2026-11-14",
+              "rising_words": [{"word": "horror", "now": 12, "before": 5}], "trending_searches": []}
+    text = to_markdown(report)
+    assert "## Long-form: top videos" in text and "## Short videos: top videos" in text
+    assert "## Rising since 2026-11-14" in text and "horror (5 to 12 videos)" in text

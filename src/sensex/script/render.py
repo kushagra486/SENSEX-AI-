@@ -34,6 +34,8 @@ def render(package: ScriptPackage, tools: ToolsConfig) -> str:
         out.append("\n\n".join(lines))
 
     story = ["## Story", f"**Opening hook (first 3 seconds):** {package.story.opening_hook}"]
+    story.append("**Other openings to test:**\n" + "\n".join(
+        f"- {hook}" for hook in package.story.hook_variants))
     story += [f"**{act.name}:** {act.summary}" for act in package.story.acts]
     story.append(f"**Ending:** {package.story.ending}")
     out.append("\n\n".join(story))
@@ -84,7 +86,9 @@ def render(package: ScriptPackage, tools: ToolsConfig) -> str:
 
     posting = package.posting
     out.append(
-        f"## Posting pack\n\n**Title:** {posting.title}\n\n**Caption:** {posting.caption}\n\n"
+        f"## Posting pack\n\n**Title:** {posting.title}\n\n**Other titles to test:**\n"
+        + "\n".join(f"- {title}" for title in posting.title_variants)
+        + f"\n\n**Caption:** {posting.caption}\n\n"
         f"**Hashtags:** {' '.join(posting.hashtags)}\n\n**Thumbnail prompt:**\n\n"
         f"{_code(posting.thumbnail_prompt)}"
     )

@@ -37,6 +37,9 @@ franchises or copyrighted characters. `original_twist` must name what is ours.
 
 - **Hook:** the first shot is 2 to 4 seconds and shows the strangest or most
   tense image of the video. No titles, no slow establishing shots.
+- **Variants:** give two other openings in `hook_variants` and two other titles
+  in `title_variants`. Each must be a different angle on the same video, not a
+  rewording, so posting them tells us which angle the audience prefers.
 - **Characters:** write each `visual_block` once, as concrete as possible (age,
   build, hair, face mark, exact clothing and colours), then paste it word for
   word into every prompt the character appears in. Keep casts small: 2 or 3

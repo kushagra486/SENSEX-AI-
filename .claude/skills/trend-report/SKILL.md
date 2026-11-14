@@ -8,8 +8,9 @@ description: Scan what AI videos are trending right now and explain what is work
 1. Read `config/channel.yaml` so you know the niche, language, region and audience.
 2. Run `uv run sensex trends` (add `--window month` for a wider view). It writes
    `data/trends/<date>.md` and `.json`. If a search failed, say which one.
-3. Read the report. The numbers only cover YouTube search results, and regular
-   search under-reports Shorts, so widen the picture with web searches in the
+3. Read the report. It has a long-form section, a short-videos section (under
+   four minutes, the closest search gets to Shorts) and, from the second run
+   on, words rising since the last report. It covers YouTube only, so widen the picture with web searches in the
    channel's niche and language. Keep every link. Cover:
    - **Short-form:** what is trending this week on YouTube Shorts, Instagram
      Reels and TikTok (formats, sounds, story types, hashtags).

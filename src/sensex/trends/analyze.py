@@ -121,11 +121,54 @@ def analyze(videos: list[dict], top_n: int = 25) -> dict:
     }
 
 
+def rising_words(current: dict, previous: dict, limit: int = 15) -> list[dict]:
+    """Title words in more videos now than in the previous report, biggest jump first."""
+    before = {row["word"]: row["videos"] for row in previous.get("title_words", [])}
+    rows = [
+        {"word": row["word"], "now": row["videos"], "before": before.get(row["word"], 0)}
+        for row in current.get("title_words", [])
+        if row["videos"] > before.get(row["word"], 0)
+    ]
+    rows.sort(key=lambda row: row["now"] - row["before"], reverse=True)
+    return rows[:limit]
+
+
 def _table(headers: list[str], rows: list[list]) -> str:
     lines = ["| " + " | ".join(headers) + " |", "|" + "---|" * len(headers)]
     for row in rows:
         lines.append("| " + " | ".join(str(cell).replace("|", "/") for cell in row) + " |")
     return "\n".join(lines)
+
+
+def _analysis_sections(analysis: dict, label: str) -> list[str]:
+    parts = []
+    parts.append(f"## {label}: which searches are hottest\n\n" + _table(
+        ["Search", "Videos", "Median views", "Top views", "Top title"],
+        [[q["query"], q["videos"], f"{q['median_views']:,}", f"{q['top_views']:,}", q["top_title"]]
+         for q in analysis["queries"]],
+    ))
+    parts.append(f"## {label}: which lengths get the views\n\n" + _table(
+        ["Length", "Videos", "Median views"],
+        [[row["length"], row["videos"], f"{row['median_views']:,}"] for row in analysis["lengths"]],
+    ))
+    parts.append(f"## {label}: title habits\n\n" + _table(
+        ["Habit", "Videos", "Share", "Median views"],
+        [[p["pattern"], p["videos"], f"{p['share']:.0%}", f"{p['median_views']:,}"]
+         for p in analysis["title_patterns"]],
+    ))
+    parts.append(f"## {label}: words that keep appearing in titles\n\n" + ", ".join(
+        f"{w['word']} ({w['videos']})" for w in analysis["title_words"]
+    ))
+    parts.append(f"## {label}: top videos\n\n" + _table(
+        ["Views", "Length", "Title", "Channel", "Link"],
+        [[f"{v['views']:,}", f"{v['duration_seconds'] // 60}:{v['duration_seconds'] % 60:02d}",
+          v["title"], v["channel"], v["url"]] for v in analysis["top_videos"]],
+    ))
+    if analysis["repeat_channels"]:
+        parts.append(f"## {label}: channels with several hits\n\n" + ", ".join(
+            f"{c['channel']} ({c['videos']})" for c in analysis["repeat_channels"]
+        ))
+    return parts
 
 
 def to_markdown(report: dict) -> str:
@@ -142,31 +185,14 @@ def to_markdown(report: dict) -> str:
         parts.append("No videos were found.")
         return "\n\n".join(parts) + "\n"
 
-    parts.append("## Which searches are hottest\n\n" + _table(
-        ["Search", "Videos", "Median views", "Top views", "Top title"],
-        [[q["query"], q["videos"], f"{q['median_views']:,}", f"{q['top_views']:,}", q["top_title"]]
-         for q in analysis["queries"]],
-    ))
-    parts.append("## Which lengths get the views\n\n" + _table(
-        ["Length", "Videos", "Median views"],
-        [[row["length"], row["videos"], f"{row['median_views']:,}"] for row in analysis["lengths"]],
-    ))
-    parts.append("## Title habits\n\n" + _table(
-        ["Habit", "Videos", "Share", "Median views"],
-        [[p["pattern"], p["videos"], f"{p['share']:.0%}", f"{p['median_views']:,}"]
-         for p in analysis["title_patterns"]],
-    ))
-    parts.append("## Words that keep appearing in titles\n\n" + ", ".join(
-        f"{w['word']} ({w['videos']})" for w in analysis["title_words"]
-    ))
-    parts.append("## Top videos\n\n" + _table(
-        ["Views", "Length", "Title", "Channel", "Link"],
-        [[f"{v['views']:,}", f"{v['duration_seconds'] // 60}:{v['duration_seconds'] % 60:02d}",
-          v["title"], v["channel"], v["url"]] for v in analysis["top_videos"]],
-    ))
-    if analysis["repeat_channels"]:
-        parts.append("## Channels with several hits\n\n" + ", ".join(
-            f"{c['channel']} ({c['videos']})" for c in analysis["repeat_channels"]
+    parts += _analysis_sections(analysis, "Long-form")
+    shorts = report.get("shorts_analysis") or {}
+    if shorts.get("video_count"):
+        parts.append(f"{shorts['video_count']} short videos (under four minutes) scanned separately.")
+        parts += _analysis_sections(shorts, "Short videos")
+    if report.get("rising_words"):
+        parts.append(f"## Rising since {report['compared_with']}\n\n" + ", ".join(
+            f"{row['word']} ({row['before']} to {row['now']} videos)" for row in report["rising_words"]
         ))
     if report.get("trending_searches"):
         parts.append(f"## Trending Google searches ({report['region']})\n\n" + "\n".join(
