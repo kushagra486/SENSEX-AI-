@@ -16,6 +16,7 @@ from sensex.script import assemble as script_assemble
 from sensex.script import series as script_series
 from sensex.script.render import render
 from sensex import site as site_builder
+from sensex.generate import huggingface
 from sensex.trends import analyze, sources
 
 
@@ -149,6 +150,37 @@ def run_assemble(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_gen(args: argparse.Namespace) -> int:
+    package = _load_package(args.folder / "package.json")
+    if package is None:
+        return 1
+    shots = {shot.id: shot for shot in package.shots}
+    wanted = args.shots or list(shots)
+    unknown = [shot_id for shot_id in wanted if shot_id not in shots]
+    if unknown:
+        print(f"No such shot(s): {', '.join(unknown)}. This script has {', '.join(shots)}.")
+        return 1
+    for shot_id in wanted:
+        shot = shots[shot_id]
+        clip = args.folder / "clips" / f"{shot_id}.mp4"
+        if clip.exists() and not args.redo:
+            print(f"{shot_id}: already generated, skipped (use --redo to replace).")
+            continue
+        try:
+            frame = huggingface.make_frame(shot.prompt, args.folder / "frames" / f"{shot_id}.png",
+                                           package.aspect_ratio)
+            huggingface.animate(frame, shot.prompt, shot.duration_seconds, clip)
+        except huggingface.GenerationError as error:
+            print(f"{shot_id}: FAILED. {error}")
+            return 1
+        note = ""
+        if shot.duration_seconds > huggingface.MAX_CLIP_SECONDS:
+            note = (f" It is {huggingface.MAX_CLIP_SECONDS}s, shorter than the {shot.duration_seconds:g}s "
+                    "shot; assembly holds the last frame for the rest.")
+        print(f"{shot_id}: wrote {clip}.{note}")
+    return 0
+
+
 def run_site(args: argparse.Namespace) -> int:
     path = site_builder.build()
     print(f"Wrote {path.relative_to(ROOT)}")
@@ -223,6 +255,12 @@ def main() -> int:
     assemble = commands.add_parser("assemble", help="Join generated clips into the final video.")
     assemble.add_argument("folder", type=Path, help="Script folder holding package.json and clips/.")
     assemble.set_defaults(run=run_assemble)
+
+    gen = commands.add_parser("gen", help="Generate clips for a script on free Hugging Face Spaces.")
+    gen.add_argument("folder", type=Path, help="Script folder holding package.json.")
+    gen.add_argument("shots", nargs="*", help="Shot ids to generate; all shots if omitted.")
+    gen.add_argument("--redo", action="store_true", help="Replace clips that already exist.")
+    gen.set_defaults(run=run_gen)
 
     site = commands.add_parser("site", help="Build the web view of scripts, series and trends.")
     site.set_defaults(run=run_site)

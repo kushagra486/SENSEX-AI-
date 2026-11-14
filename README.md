@@ -93,11 +93,23 @@ uv run sensex trends [--window week|month]
 uv run sensex check scripts/<folder>/package.json
 uv run sensex render scripts/<folder>/package.json
 uv run sensex series record scripts/<folder>/package.json
+uv run sensex gen scripts/<folder> [shot ids]
 uv run sensex assemble scripts/<folder>
 uv run sensex clips find media/<file> [--min 20 --max 60]
 uv run sensex clips cut media/<file> clips/<name>/plan.json
 uv run pytest
 ```
+
+## Generating clips for free (Hugging Face)
+
+`uv run sensex gen scripts/<folder> [S1 S2 ...]` makes clips without pasting
+anything: for each shot it creates a still first frame, then animates it,
+using public Hugging Face Spaces, and saves `clips/S1.mp4` and so on, ready
+for `assemble`. Limits: clips are silent, at most 5 seconds, and the free GPU
+allowance covers only a few clips a day. It needs your Hugging Face token as
+the `HF_TOKEN` environment variable; without one the shared anonymous
+allowance is usually already used up. The command is tested with stand-ins;
+no real clip has been generated with it yet.
 
 ## Posting
 
