@@ -12,6 +12,8 @@ from sensex.clips import analyze as clip_analyze
 from sensex.clips import cut as clip_cut
 from sensex.config import ROOT, load_channel, load_tools
 from sensex.script.package import ScriptPackage, budget, check
+from sensex.script import assemble as script_assemble
+from sensex.script import series as script_series
 from sensex.script.render import render
 from sensex.trends import analyze, sources
 
@@ -88,6 +90,12 @@ def run_check(args: argparse.Namespace) -> int:
         return 1
     tools = load_tools()
     result = check(package, tools)
+    if package.series:
+        bible = script_series.load_bible(package.series.title)
+        if bible:
+            errors, warnings = script_series.check_against_bible(package, bible)
+            result.errors += errors
+            result.warnings += warnings
     for message in result.errors:
         print(f"  ERROR {message}")
     for message in result.warnings:
@@ -107,6 +115,36 @@ def run_render(args: argparse.Namespace) -> int:
     out_path = args.package.with_name("script.md")
     out_path.write_text(render(package, load_tools()), encoding="utf-8")
     print(f"Wrote {out_path}")
+    return 0
+
+
+def run_series_record(args: argparse.Namespace) -> int:
+    if run_check(args) != 0:
+        print("Not recorded: fix the errors first.")
+        return 1
+    package = _load_package(args.package)
+    if package.series is None:
+        print("Not a series episode: nothing to record.")
+        return 1
+    bible = script_series.record(package, script_series.load_bible(package.series.title))
+    path = script_series.bible_path(package.series.title)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(bible.model_dump_json(indent=2), encoding="utf-8")
+    print(f"Recorded episode {package.series.episode_number} in {path.relative_to(ROOT)} "
+          f"({len(bible.episodes)} episode(s), {len(bible.characters)} character(s)).")
+    return 0
+
+
+def run_assemble(args: argparse.Namespace) -> int:
+    package = _load_package(args.folder / "package.json")
+    if package is None:
+        return 1
+    try:
+        final = script_assemble.assemble(package, args.folder)
+    except (FileNotFoundError, RuntimeError) as error:
+        print(f"ERROR {error}")
+        return 1
+    print(f"Wrote {final}")
     return 0
 
 
@@ -168,6 +206,16 @@ def main() -> int:
         command = commands.add_parser(name, help=text)
         command.add_argument("package", type=Path)
         command.set_defaults(run=run)
+
+    series = commands.add_parser("series", help="Keep a series consistent across episodes.")
+    series_commands = series.add_subparsers(dest="series_command", required=True)
+    record = series_commands.add_parser("record", help="Add an episode to its series bible.")
+    record.add_argument("package", type=Path)
+    record.set_defaults(run=run_series_record)
+
+    assemble = commands.add_parser("assemble", help="Join generated clips into the final video.")
+    assemble.add_argument("folder", type=Path, help="Script folder holding package.json and clips/.")
+    assemble.set_defaults(run=run_assemble)
 
     clips = commands.add_parser("clips", help="Find and cut short clips from a video you own.")
     clip_commands = clips.add_subparsers(dest="clip_command", required=True)

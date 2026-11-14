@@ -1,0 +1,44 @@
+{
+  "title": "Pintu Pigeon, CEO",
+  "season_arc": "Pintu defends Pigeon Express against bigger and stranger delivery machines while building a crew of rooftop misfits.",
+  "characters": [
+    {
+      "id": "pintu",
+      "name": "Pintu",
+      "role": "protagonist",
+      "archetype": "proud underdog",
+      "personality": "Boastful, loyal, quick-thinking, hates being called old-fashioned",
+      "voice": "Fast, confident Mumbai street voice, slightly nasal",
+      "visual_block": "Pintu, a plump grey city pigeon with a shiny green-and-purple neck, big expressive brown eyes, wearing a tiny red waistcoat with gold buttons and a miniature black leather satchel across his chest",
+      "reference_image_prompt": "Character reference sheet, full body, front and side view, plain light grey background, bright colourful 3D animated cartoon style. Pintu, a plump grey city pigeon with a shiny green-and-purple neck, big expressive brown eyes, wearing a tiny red waistcoat with gold buttons and a miniature black leather satchel across his chest."
+    },
+    {
+      "id": "drona",
+      "name": "Drona",
+      "role": "antagonist",
+      "archetype": "cold machine rival",
+      "personality": "Literal, smug, speaks in statistics, cannot improvise",
+      "voice": "Flat robotic voice with a soft electronic hum",
+      "visual_block": "Drona, a sleek glossy white delivery drone with four black rotors, one glowing red camera eye and a small blue cargo box underneath",
+      "reference_image_prompt": "Character reference sheet, full body, front and side view, plain light grey background, bright colourful 3D animated cartoon style. Drona, a sleek glossy white delivery drone with four black rotors, one glowing red camera eye and a small blue cargo box underneath."
+    },
+    {
+      "id": "ammaji",
+      "name": "Ammaji",
+      "role": "ally",
+      "archetype": "warm elder",
+      "personality": "Kind, loud, trusts what she has known for years",
+      "voice": "Warm elderly woman's voice, loud enough to cross a street",
+      "visual_block": "Ammaji, a 70-year-old Indian grandmother with silver hair in a bun, round gold spectacles, wearing a purple cotton saree and a white cardigan",
+      "reference_image_prompt": "Character reference sheet, full body, front and side view, plain light grey background, bright colourful 3D animated cartoon style. Ammaji, a 70-year-old Indian grandmother with silver hair in a bun, round gold spectacles, wearing a purple cotton saree and a white cardigan."
+    }
+  ],
+  "episodes": [
+    {
+      "number": 1,
+      "title": "Pintu Pigeon, CEO. Ep 1: The Drone",
+      "summary": "A proud delivery pigeon loses every customer to a 10-minute delivery drone, until one lunch box needs to go where no drone can fly.",
+      "cliffhanger": "A hundred drones rise over the skyline behind Pintu."
+    }
+  ]
+}

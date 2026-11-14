@@ -1,0 +1,34 @@
+{
+  "title": "Chai at 3:07",
+  "season_arc": "Kabir learns why the stall chose him, and who Noor was before the road took her.",
+  "characters": [
+    {
+      "id": "kabir",
+      "name": "Kabir",
+      "role": "protagonist",
+      "archetype": "weary sceptic",
+      "personality": "Gruff, practical, believes in nothing he cannot repair, quietly grieving",
+      "voice": "Deep, tired male voice, Hindi-accented English, speaks slowly",
+      "visual_block": "Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt",
+      "reference_image_prompt": "Character reference sheet, full body, front and three-quarter view, plain grey background, cinematic realism, soft even light. Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt."
+    },
+    {
+      "id": "noor",
+      "name": "Noor",
+      "role": "guide",
+      "archetype": "gentle ghost",
+      "personality": "Calm, kind, speaks as if she has said this many times, never blinks at danger",
+      "voice": "Soft young female voice, unhurried, slight echo",
+      "visual_block": "Noor, a 20-year-old Indian woman with a long single black braid, a small silver nose stud, pale grey eyes, wearing a dark green salwar kameez and a mustard yellow shawl",
+      "reference_image_prompt": "Character reference sheet, full body, front and three-quarter view, plain grey background, cinematic realism, soft even light. Noor, a 20-year-old Indian woman with a long single black braid, a small silver nose stud, pale grey eyes, wearing a dark green salwar kameez and a mustard yellow shawl."
+    }
+  ],
+  "episodes": [
+    {
+      "number": 1,
+      "title": "Chai at 3:07, Ep 1: The Stall That Wasn't There",
+      "summary": "A tea stall appears on a mountain highway at 3:07 every night. Everyone who stops there is about to die on the road, and tonight it's Kabir's turn.",
+      "cliffhanger": "Kabir's own truck drives past the stall with Kabir at the wheel, heading for the broken bridge."
+    }
+  ]
+}

@@ -4,3 +4,7 @@ __pycache__/
 .pytest_cache/
 media/
 clips/*/*.mp4
+scripts/*/clips/
+scripts/*/audio/
+scripts/*/build/
+scripts/*/final.mp4

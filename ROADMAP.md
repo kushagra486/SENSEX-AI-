@@ -1,6 +1,6 @@
 # Ideas for making this better
 
-Ordered by how much I think each would help. None of these is built.
+Ordered by how much I think each would help. Built so far: the series bible (3), a basic version of video assembly (5, no music or transitions yet) and the retention check (10).
 
 ## 1. Learn from your own results
 

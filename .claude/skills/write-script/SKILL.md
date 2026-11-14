@@ -15,15 +15,29 @@ exact shape; `src/sensex/script/package.py` defines every field.
    `data/trends/`. If the newest report is more than 3 days old, run the
    trend-report skill first.
 2. If the user did not choose a format, pick the one the report favours and say why.
-3. For a series: look in `scripts/` for earlier episodes of the same series.
-   Reuse their characters unchanged (same `id`, same `visual_block`), continue
-   the `season_arc`, and summarise the last episode in `previously`.
+3. For a series: read `series/<slug>/bible.json` if it exists. It holds the
+   fixed characters and a log of every episode. Copy the characters from it
+   unchanged (same `id`, same `visual_block`), continue the `season_arc`, pick
+   up from the last episode's cliffhanger, and summarise it in `previously`.
+   The check fails if a character's look differs from the bible.
 4. Pitch three ideas in chat, one line each, with the trend each draws on and
    its twist. Let the user pick, unless they asked you to choose.
 5. Write `package.json`.
 6. Run `uv run sensex render scripts/<date>-<slug>/package.json`. Fix every
    error and re-run until it passes. Read the warnings and fix the ones that matter.
-7. Tell the user the file path, the runtime, and how many days of credits it needs.
+7. For a series episode, run `uv run sensex series record <package.json>` so
+   the bible knows this episode exists.
+8. Tell the user the file path, the runtime, and how many days of credits it needs.
+
+## After the user has generated the clips
+
+They save each clip in `scripts/<folder>/clips/` named after its shot
+(`S1.mp4`, `S2.mp4`...), and optional voiceover files in
+`scripts/<folder>/audio/` with the same names. Then run
+`uv run sensex assemble scripts/<folder>`. It joins the shots in order at the
+scripted lengths, adds the on-screen text, and writes `final.mp4`. If clips
+are missing it names them. Music and transitions other than hard cuts are not
+added; say so.
 
 ## Originality
 

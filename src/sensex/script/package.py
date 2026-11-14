@@ -23,6 +23,8 @@ RUNTIME_RANGE: dict[str, tuple[int, int]] = {
 }
 RUNTIME_TOLERANCE = 0.15
 MAX_HOOK_SHOT_SECONDS = 4
+MAX_AVERAGE_SHOT_SECONDS = 7
+MAX_SILENT_STRETCH_SECONDS = 16
 
 
 class Character(BaseModel):
@@ -198,6 +200,25 @@ def check(package: ScriptPackage, tools: ToolsConfig) -> CheckResult:
     if not low <= runtime <= high:
         result.warnings.append(
             f"{runtime:g}s is outside the usual {low}-{high}s range for a {package.format}."
+        )
+
+    if not (first.on_screen_text or first.dialogue or first.voiceover):
+        result.warnings.append(
+            f"Shot {first.id}: the opening has no on-screen text or spoken line. Many viewers "
+            "watch muted and need a reason to stay in the first seconds."
+        )
+    if runtime <= 90 and runtime / len(package.shots) > MAX_AVERAGE_SHOT_SECONDS:
+        result.warnings.append(
+            f"Average shot is {runtime / len(package.shots):.1f}s. Short videos hold attention "
+            f"better with a new image every {MAX_AVERAGE_SHOT_SECONDS}s or less."
+        )
+    quiet = longest = 0.0
+    for shot in package.shots:
+        quiet = 0.0 if (shot.dialogue or shot.voiceover) else quiet + shot.duration_seconds
+        longest = max(longest, quiet)
+    if longest > MAX_SILENT_STRETCH_SECONDS:
+        result.warnings.append(
+            f"{longest:g}s pass with no dialogue or voiceover. Add a line or shorten the stretch."
         )
 
     days = budget(package, tools).days_needed

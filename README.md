@@ -17,6 +17,10 @@ Open this folder in Claude Code and ask in plain words:
   `scripts/<date>-<name>/script.md`.
 - **"Write the next episode of <series>"** continues a series with the same
   characters.
+- **"Assemble <script folder>"** joins the clips you generated into the
+  finished video. Save each clip as `scripts/<folder>/clips/S1.mp4`,
+  `S2.mp4`... (and optional voiceovers as `scripts/<folder>/audio/S2.mp3`),
+  and it writes `final.mp4` with the on-screen text added.
 - **"Cut clips from media/<file>"** finds the best moments in a video you own,
   and cuts them into vertical 1080x1920 clips with captions in
   `clips/<name>/`, with a review sheet. Only use footage you made or have
@@ -26,6 +30,19 @@ Each `script.md` contains the story, character sheets with reference-image
 prompts, every shot as a paste-ready prompt tagged with the tool to use, an
 edit timeline, a credit budget, and a title, caption and hashtags.
 See `examples/script.md`.
+
+## What you need to add
+
+| What | Where | Needed for |
+|---|---|---|
+| Your niche, language, country, audience | `config/channel.yaml` | Every report and script |
+| Your search terms | `config/channel.yaml`, under `queries` | The trend scan |
+| Real limits of your video tools | `config/tools.yaml` | The credit budget |
+| Character reference images | Make them from the prompts in each `script.md`, keep them with the script | Consistent characters |
+| Generated clips, named by shot | `scripts/<folder>/clips/` | Assembling the video |
+| Voiceover files (optional) | `scripts/<folder>/audio/` | Tools that make silent clips |
+| A video you own | `media/` | Cutting clips |
+| Instagram and YouTube connected in Metricool | Metricool, Connections | Posting |
 
 ## Set it up for your channel
 
@@ -44,6 +61,11 @@ Every script is checked before it is rendered:
   appear in, so they look the same across clips
 - the shots add up to the target runtime
 - the whole video can be generated within the free daily credits
+- a series episode uses the same character descriptions as its series bible
+  (`series/<name>/bible.json`)
+
+It also warns about weak pacing: a slow opening shot, an opening with no text
+or spoken line, long average shots, and long stretches with nobody speaking.
 
 ## Commands
 
@@ -51,6 +73,8 @@ Every script is checked before it is rendered:
 uv run sensex trends [--window week|month]
 uv run sensex check scripts/<folder>/package.json
 uv run sensex render scripts/<folder>/package.json
+uv run sensex series record scripts/<folder>/package.json
+uv run sensex assemble scripts/<folder>
 uv run sensex clips find media/<file> [--min 20 --max 60]
 uv run sensex clips cut media/<file> clips/<name>/plan.json
 uv run pytest
