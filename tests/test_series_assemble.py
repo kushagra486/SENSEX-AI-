@@ -100,3 +100,14 @@ def test_assemble_joins_clips_to_script_length(tmp_path):
     assert (video["width"], video["height"]) == (1080, 1920)
     assert any(s["codec_type"] == "audio" for s in info["streams"])
     assert float(info["format"]["duration"]) == pytest.approx(package.runtime_seconds, abs=0.7)
+
+
+def test_site_embeds_every_script_series_and_trend_report():
+    from sensex import site
+    data = site.collect()
+    assert {s["folder"] for s in data["scripts"]} >= {"2026-11-14-pintu-pigeon-ep1"}
+    assert data["series"] and data["trends"]["notes"].strip()
+    html = site.build().read_text()
+    assert "/*DATA*/" not in html and "Pintu Pigeon" in html
+    payload = html.split('id="data">')[1].split("</script>")[0]
+    assert json.loads(payload)["scripts"]

@@ -15,6 +15,7 @@ from sensex.script.package import ScriptPackage, budget, check
 from sensex.script import assemble as script_assemble
 from sensex.script import series as script_series
 from sensex.script.render import render
+from sensex import site as site_builder
 from sensex.trends import analyze, sources
 
 
@@ -148,6 +149,12 @@ def run_assemble(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_site(args: argparse.Namespace) -> int:
+    path = site_builder.build()
+    print(f"Wrote {path.relative_to(ROOT)}")
+    return 0
+
+
 def _clip_dir(video: Path) -> Path:
     return ROOT / "clips" / video.stem
 
@@ -216,6 +223,9 @@ def main() -> int:
     assemble = commands.add_parser("assemble", help="Join generated clips into the final video.")
     assemble.add_argument("folder", type=Path, help="Script folder holding package.json and clips/.")
     assemble.set_defaults(run=run_assemble)
+
+    site = commands.add_parser("site", help="Build the web view of scripts, series and trends.")
+    site.set_defaults(run=run_site)
 
     clips = commands.add_parser("clips", help="Find and cut short clips from a video you own.")
     clip_commands = clips.add_subparsers(dest="clip_command", required=True)

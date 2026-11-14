@@ -1,0 +1,294 @@
+<title>Sensex Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a production binder. Sticky tab bar; scripts open as a slate header,
+   a to-scale shot strip, then one slate row per shot with its paste-ready prompt. */
+:root {
+  --bg: #f1f3f7; --surface: #ffffff; --sunken: #e7ebf1; --ink: #131a26; --muted: #586377;
+  --line: #d3dae5; --accent: #c2255c; --accent-ink: #ffffff;
+  --tool-1: #2f6fde; --tool-2: #0e9384; --tool-3: #b7791f; --tool-4: #7c4ddb;
+  --warn: #a15c00;
+  --display: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f131a; --surface: #171d27; --sunken: #0b0e14; --ink: #e9edf4; --muted: #97a3b6;
+  --line: #2a3443; --accent: #ff6f9f; --accent-ink: #1a0810;
+  --tool-1: #6ea2ff; --tool-2: #3fcdbb; --tool-3: #e0a84a; --tool-4: #ab8bf5;
+  --warn: #f0b354; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f131a; --surface: #171d27; --sunken: #0b0e14; --ink: #e9edf4; --muted: #97a3b6;
+  --line: #2a3443; --accent: #ff6f9f; --accent-ink: #1a0810;
+  --tool-1: #6ea2ff; --tool-2: #3fcdbb; --tool-3: #e0a84a; --tool-4: #ab8bf5;
+  --warn: #f0b354; color-scheme: dark }
+
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1040px; margin: 0 auto; }
+a { color: var(--accent); }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+header.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+.bar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 24px; padding-block: 10px; }
+.brand { font: 700 19px/1 var(--display); letter-spacing: -0.01em; }
+.brand small { font: 400 12px var(--body); color: var(--muted); margin-left: 8px; letter-spacing: 0; }
+nav { display: flex; gap: 4px; }
+nav button { background: none; border: 0; padding: 6px 12px; border-radius: 6px; font-weight: 500; color: var(--muted); }
+nav button[aria-current="page"] { background: var(--ink); color: var(--bg); }
+
+main { padding-block: 24px 64px; display: flex; flex-direction: column; gap: 28px; }
+h1 { font: 700 clamp(26px, 5vw, 38px)/1.1 var(--display); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+h2 { font: 700 20px/1.2 var(--display); margin: 0; }
+h3 { font: 600 15px/1.3 var(--body); margin: 0; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font: 600 11px var(--mono); letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+.muted { color: var(--muted); }
+.stack { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.stack.tight { gap: 6px; }
+section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+.picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.pick { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.pick[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.pick b { font: 600 15px/1.3 var(--body); }
+.pick span { font-size: 12px; color: var(--muted); }
+
+.meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 600 11px var(--mono); padding: 3px 8px; border-radius: 4px; background: var(--sunken); color: var(--ink); white-space: nowrap; }
+.chip.tool { background: color-mix(in srgb, var(--hue) 18%, var(--surface)); box-shadow: inset 3px 0 0 var(--hue); }
+
+.strip { display: flex; height: 44px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
+.strip a { flex-basis: 0; min-width: 0; display: flex; align-items: center; justify-content: center; font: 600 11px var(--mono); color: var(--ink); text-decoration: none; background: color-mix(in srgb, var(--hue) 30%, var(--surface)); border-right: 1px solid var(--surface); overflow: hidden; }
+.ruler { display: flex; justify-content: space-between; font: 400 11px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--hue); margin-right: 6px; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.kv { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 14px; font-size: 14px; }
+.kv dt { color: var(--muted); } .kv dd { margin: 0; min-width: 0; }
+ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; max-width: 68ch; }
+.warn { color: var(--warn); font-size: 14px; }
+
+.shot { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--hue); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; scroll-margin-top: 80px; }
+.slate { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; font: 600 12px var(--mono); font-variant-numeric: tabular-nums; }
+.slate .id { font-size: 15px; }
+.slate .who { font: 400 13px var(--body); color: var(--muted); }
+.prompt { position: relative; background: var(--sunken); border-radius: 6px; padding: 12px 12px 12px 12px; }
+.prompt pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 400 13px/1.6 var(--mono); padding-right: 64px; }
+.copy { position: absolute; top: 8px; right: 8px; font: 600 11px var(--mono); background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 4px 8px; }
+.copy.done { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.cues { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 2px 12px; font-size: 14px; }
+.cues dt { font: 600 11px/1.9 var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.cues dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 600 11px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.title { min-width: 220px; }
+.notes { display: flex; flex-direction: column; gap: 10px; }
+.notes h3 { margin-top: 8px; font: 700 16px var(--display); }
+.empty { color: var(--muted); padding: 24px 0; }
+</style>
+
+<header class="bar"><div class="wrap gutter">
+  <div class="brand">Sensex Studio<small id="built"></small></div>
+  <nav id="nav" aria-label="Sections"></nav>
+</div></header>
+<main class="wrap gutter" id="main"></main>
+
+<script type="application/json" id="data">/*DATA*/</script>
+<script>
+const DATA = JSON.parse(document.getElementById("data").textContent);
+const VIEWS = [["scripts", "Scripts"], ["series", "Series"], ["trends", "Trends"]];
+const toolNames = Object.keys(DATA.tools);
+const hue = (tool) => `var(--tool-${(Math.max(0, toolNames.indexOf(tool)) % 4) + 1})`;
+const label = (tool) => (DATA.tools[tool] || {}).label || tool;
+const clock = (s) => { s = Math.round(s); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+const num = (n) => Number(n).toLocaleString("en-IN");
+let selected = null;
+
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k === "class") el.className = v;
+    else if (k === "style") el.style.cssText = v;
+    else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v);
+  }
+  for (const kid of kids.flat(Infinity)) if (kid != null && kid !== false) el.append(kid);
+  return el;
+}
+
+function inline(text) {
+  const out = [];
+  const pattern = /\*\*(.+?)\*\*|\[([^\]]+)\]\((https?:[^)]+)\)/g;
+  let last = 0, m;
+  while ((m = pattern.exec(text))) {
+    if (m.index > last) out.push(text.slice(last, m.index));
+    out.push(m[1] ? h("strong", {}, m[1]) : h("a", { href: m[3], target: "_blank", rel: "noopener" }, m[2]));
+    last = pattern.lastIndex;
+  }
+  if (last < text.length) out.push(text.slice(last));
+  return out;
+}
+
+function markdown(text) {
+  const box = h("div", { class: "notes" });
+  let list = null;
+  for (const raw of text.split("\n")) {
+    const line = raw.trim();
+    const bullet = line.match(/^(?:-|\d+\.)\s+(.*)/);
+    if (bullet) { if (!list) { list = h("ul"); box.append(list); } list.append(h("li", {}, inline(bullet[1]))); continue; }
+    list = null;
+    if (!line) continue;
+    if (line.startsWith("### ")) box.append(h("h3", {}, line.slice(4)));
+    else if (!line.startsWith("## ")) box.append(h("p", {}, inline(line)));
+  }
+  return box;
+}
+
+function copyBlock(text) {
+  const pre = h("pre", {}, text);
+  const button = h("button", { class: "copy", type: "button", onclick: async () => {
+    try { await navigator.clipboard.writeText(text); }
+    catch { const range = document.createRange(); range.selectNodeContents(pre); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(range); button.textContent = "Selected"; return; }
+    button.textContent = "Copied"; button.classList.add("done");
+    setTimeout(() => { button.textContent = "Copy"; button.classList.remove("done"); }, 1400);
+  } }, "Copy");
+  return h("div", { class: "prompt" }, pre, button);
+}
+
+function table(headers, rows) {
+  return h("div", { class: "scroll" }, h("table", {},
+    h("thead", {}, h("tr", {}, headers.map(([text, cls]) => h("th", { class: cls }, text)))),
+    h("tbody", {}, rows.map((cells) => h("tr", {}, cells.map((cell, i) => h("td", { class: headers[i][1] }, cell)))))));
+}
+
+function scriptView() {
+  if (!DATA.scripts.length) return [h("p", { class: "empty" }, "No scripts yet. Ask for one in the Claude session and this page will show it after the next update.")];
+  const entry = DATA.scripts.find((s) => s.folder === selected) || DATA.scripts[0];
+  const p = entry.package;
+  const names = Object.fromEntries(p.characters.map((c) => [c.id, c.name]));
+  const total = p.shots.reduce((sum, s) => sum + s.duration_seconds, 0);
+  const picker = h("div", { class: "picker" }, DATA.scripts.map((s) => h("button", {
+    class: "pick", type: "button", "aria-pressed": String(s === entry),
+    onclick: () => { selected = s.folder; render(); } },
+    h("b", {}, s.package.title),
+    h("span", {}, `${s.package.format.replace("_", " ")} · ${clock(s.runtime)} · ${s.package.shots.length} shots · ${s.days} day${s.days === 1 ? "" : "s"} of credits`))));
+
+  let at = 0;
+  const strip = h("div", { class: "strip", role: "img", "aria-label": "Shots to scale, coloured by video tool" });
+  const shots = [];
+  for (const s of p.shots) {
+    const anchor = "shot-" + s.id;
+    strip.append(h("a", { href: "#", style: `flex-grow:${s.duration_seconds};--hue:${hue(s.tool)}`, title: `${s.id} · ${s.duration_seconds}s · ${label(s.tool)}`,
+      onclick: (e) => { e.preventDefault(); document.getElementById(anchor).scrollIntoView({ behavior: "smooth" }); } }, s.id));
+    const cues = [["Dialogue", s.dialogue], ["Voiceover", s.voiceover], ["Sound", s.sound], ["On screen", s.on_screen_text], ["Cut", s.transition !== "cut" && s.transition]]
+      .filter(([, v]) => v);
+    shots.push(h("article", { class: "shot", id: anchor, style: `--hue:${hue(s.tool)}` },
+      h("div", { class: "slate" },
+        h("span", { class: "id" }, s.id), h("span", {}, `${clock(at)}–${clock(at + s.duration_seconds)}`), h("span", {}, `${s.duration_seconds}s`),
+        h("span", { class: "chip tool" }, label(s.tool)),
+        h("span", { class: "who" }, [s.act, ...s.characters.map((c) => names[c] || c)].join(" · "))),
+      copyBlock(s.prompt),
+      cues.length ? h("dl", { class: "cues" }, cues.map(([k, v]) => [h("dt", {}, k), h("dd", {}, v)])) : null));
+    at += s.duration_seconds;
+  }
+  const used = [...new Set(p.shots.map((s) => s.tool))];
+
+  return [
+    h("section", {}, h("div", { class: "eyebrow" }, "Scripts"), picker),
+    h("section", {},
+      h("h1", {}, p.title), h("p", { class: "muted" }, p.logline),
+      h("div", { class: "meta" }, [p.format.replace("_", " "), p.aspect_ratio, clock(total), `${p.shots.length} shots`, p.platform].map((t) => h("span", { class: "chip" }, t))),
+      entry.warnings.map((w) => h("p", { class: "warn" }, "Check: " + w))),
+    h("section", {},
+      h("div", { class: "strip-wrap stack tight" }, strip, h("div", { class: "ruler" }, h("span", {}, "0:00"), h("span", {}, clock(total / 2)), h("span", {}, clock(total)))),
+      h("div", { class: "legend" }, used.map((t) => h("span", { style: `--hue:${hue(t)}` }, h("i"), `${label(t)}: ${entry.budget.clips[t]} clips, ${entry.budget.credits[t]} credits, ${entry.budget.days[t]} day${entry.budget.days[t] === 1 ? "" : "s"}`)))),
+    h("section", { class: "two" },
+      h("div", { class: "panel" }, h("h2", {}, "Why this video"),
+        h("ul", {}, p.trend_basis.map((t) => h("li", {}, t))),
+        h("p", {}, h("strong", {}, "Our twist: "), p.original_twist)),
+      h("div", { class: "panel" }, h("h2", {}, "Story"),
+        h("p", {}, h("strong", {}, "Opening: "), p.story.opening_hook),
+        p.story.acts.map((a) => h("p", {}, h("strong", {}, a.name + ": "), a.summary)),
+        h("p", {}, h("strong", {}, "Ending: "), p.story.ending),
+        p.series ? h("p", {}, h("strong", {}, "Cliffhanger: "), p.series.cliffhanger) : null)),
+    h("section", {}, h("h2", {}, "Other openings to test"), h("ul", {}, p.story.hook_variants.map((t) => h("li", {}, t)))),
+    h("section", {}, h("h2", {}, "Characters"), h("p", { class: "muted" }, "Make each reference image first, then attach it to every clip the character is in."),
+      h("div", { class: "two" }, p.characters.map((c) => h("div", { class: "panel" },
+        h("h3", {}, `${c.name} · ${c.role}`),
+        h("dl", { class: "kv" }, h("dt", {}, "Type"), h("dd", {}, c.archetype), h("dt", {}, "Personality"), h("dd", {}, c.personality), h("dt", {}, "Voice"), h("dd", {}, c.voice)),
+        copyBlock(c.reference_image_prompt))))),
+    h("section", {}, h("h2", {}, "Shots"), h("p", { class: "muted" }, "Generate in this order and paste each prompt exactly as written. Save each clip as its shot name, for example S1.mp4."), shots),
+    h("section", {}, h("h2", {}, "Posting pack"),
+      h("div", { class: "panel" },
+        h("p", {}, h("strong", {}, "Title: "), p.posting.title),
+        h("ul", {}, p.posting.title_variants.map((t) => h("li", {}, t))),
+        h("p", {}, h("strong", {}, "Caption: "), p.posting.caption),
+        h("div", { class: "meta" }, p.posting.hashtags.map((t) => h("span", { class: "chip" }, t))),
+        h("h3", {}, "Thumbnail prompt"), copyBlock(p.posting.thumbnail_prompt))),
+  ];
+}
+
+function seriesView() {
+  if (!DATA.series.length) return [h("p", { class: "empty" }, "No series recorded yet.")];
+  return DATA.series.map((b) => h("section", {},
+    h("h1", {}, b.title), h("p", { class: "muted" }, b.season_arc),
+    h("h2", {}, "Episodes"),
+    table([["Ep", "num"], ["Title", "title"], ["Summary", ""], ["Cliffhanger", ""]], b.episodes.map((e) => [String(e.number), e.title, e.summary, e.cliffhanger])),
+    h("h2", {}, "Fixed characters"),
+    h("div", { class: "two" }, b.characters.map((c) => h("div", { class: "panel" },
+      h("h3", {}, `${c.name} · ${c.role}`), h("p", { class: "muted" }, c.personality), copyBlock(c.visual_block))))));
+}
+
+function videoTable(videos) {
+  return table([["Views", "num"], ["Length", "num"], ["Title", "title"], ["Channel", ""]],
+    videos.slice(0, 15).map((v) => [num(v.views), clock(v.duration_seconds), h("a", { href: v.url, target: "_blank", rel: "noopener" }, v.title), v.channel]));
+}
+
+function trendsView() {
+  const t = DATA.trends;
+  if (!t) return [h("p", { class: "empty" }, "No trend report yet.")];
+  const a = t.analysis, s = t.shorts_analysis || {};
+  const out = [h("section", {},
+    h("div", { class: "eyebrow" }, `Trend report · ${t.date}`), h("h1", {}, t.niche),
+    h("p", { class: "muted" }, `YouTube videos uploaded in the last ${t.window}: ${num(a.video_count || 0)} long-form and ${num(s.video_count || 0)} under four minutes. Views are as of the scan.`))];
+  if (t.notes) out.push(h("section", {}, h("h2", {}, "What this means for us"), h("div", { class: "panel" }, markdown(t.notes))));
+  if (a.video_count) {
+    out.push(h("section", {}, h("h2", {}, "Which searches are hottest"),
+      table([["Search", ""], ["Median views, long", "num"], ["Median views, short", "num"]],
+        a.queries.map((q) => [q.query, num(q.median_views), num(((s.queries || []).find((x) => x.query === q.query) || {}).median_views || 0)]))));
+    out.push(h("section", {}, h("h2", {}, "Title habits"),
+      table([["Habit", ""], ["Share, long", "num"], ["Median views", "num"], ["Share, short", "num"], ["Median views", "num"]],
+        a.title_patterns.map((p) => { const o = (s.title_patterns || []).find((x) => x.pattern === p.pattern) || {};
+          return [p.pattern, Math.round(p.share * 100) + "%", num(p.median_views), o.share ? Math.round(o.share * 100) + "%" : "–", o.median_views ? num(o.median_views) : "–"]; }))));
+    out.push(h("section", {}, h("h2", {}, "Top long-form videos"), videoTable(a.top_videos)));
+  }
+  if (s.video_count) out.push(h("section", {}, h("h2", {}, "Top videos under four minutes"), videoTable(s.top_videos)));
+  if ((t.rising_words || []).length) out.push(h("section", {}, h("h2", {}, `Rising since ${t.compared_with}`),
+    h("div", { class: "meta" }, t.rising_words.map((w) => h("span", { class: "chip" }, `${w.word} ${w.before}→${w.now}`)))));
+  return out;
+}
+
+function render() {
+  const view = VIEWS.some(([id]) => id === location.hash.slice(1)) ? location.hash.slice(1) : "scripts";
+  const nav = document.getElementById("nav");
+  nav.replaceChildren(...VIEWS.map(([id, text]) => h("button", { type: "button", "aria-current": id === view ? "page" : null,
+    onclick: () => { location.hash = id; } }, text)));
+  const main = document.getElementById("main");
+  main.replaceChildren(...({ scripts: scriptView, series: seriesView, trends: trendsView })[view]());
+}
+document.getElementById("built").textContent = "updated " + DATA.built;
+addEventListener("hashchange", () => { render(); scrollTo(0, 0); });
+render();
+</script>

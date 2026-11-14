@@ -31,6 +31,15 @@ prompts, every shot as a paste-ready prompt tagged with the tool to use, an
 edit timeline, a credit budget, and a title, caption and hashtags.
 See `examples/script.md`.
 
+## The web view
+
+Everything is also visible on one page, Sensex Studio:
+https://claude.ai/artifact/7fo36vcfSafnu75euxAWuN (private to you unless you
+share it). It shows every script with a copy button on each prompt, the series
+bibles, and the latest trend report. It is a viewer: you ask for new scripts
+in the Claude session, and Claude rebuilds and republishes the page.
+`uv run sensex site` builds it to `site/index.html`.
+
 ## What you need to add
 
 | What | Where | Needed for |
