@@ -17,6 +17,7 @@ from sensex.script import series as script_series
 from sensex.script.render import render
 from sensex import site as site_builder
 from sensex.generate import huggingface
+from sensex.generate import kaggle as kaggle_runner
 from sensex.generate import shots as generate_shots
 from sensex.trends import analyze, sources
 
@@ -174,6 +175,50 @@ def run_gen(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_kaggle_start(args: argparse.Namespace) -> int:
+    package = _load_package(args.folder / "package.json")
+    if package is None:
+        return 1
+    known = [shot.id for shot in package.shots]
+    wanted = args.shots or [s for s in known if not (args.folder / "clips" / f"{s}.mp4").exists()]
+    unknown = [shot_id for shot_id in wanted if shot_id not in known]
+    if unknown:
+        print(f"No such shot(s): {', '.join(unknown)}. This script has {', '.join(known)}.")
+        return 1
+    if not wanted:
+        print("Every shot already has a clip. Name shots to redo them.")
+        return 0
+    try:
+        record = kaggle_runner.start(package, args.folder, wanted)
+    except kaggle_runner.KaggleError as error:
+        print(f"ERROR {error}")
+        return 1
+    print(f"Started on Kaggle: {len(wanted)} shot(s) ({', '.join(wanted)}). {record['url']}")
+    print(f"Collect the clips later with: sensex kaggle collect {args.folder}")
+    return 0
+
+
+def run_kaggle_collect(args: argparse.Namespace) -> int:
+    try:
+        result = kaggle_runner.collect(args.folder)
+    except kaggle_runner.KaggleError as error:
+        print(f"ERROR {error}")
+        return 1
+    for line in result["progress"]:
+        print(f"  {line}")
+    if not result["finished"]:
+        for line in result["trouble"]:
+            print(f"  PROBLEM {line[:300]}")
+        waiting = " It is waiting in Kaggle's queue for a free GPU." if result["state"] == "queued" else ""
+        print(f"Not finished yet (Kaggle says: {result['state']}).{waiting} Run this again in a few minutes.")
+        return 2
+    failed = {k: v for k, v in result["results"].items() if not v.get("ok")}
+    print(f"Finished in {result['total_seconds']}s. Saved clips: {', '.join(result['saved']) or 'none'}.")
+    for shot_id, outcome in failed.items():
+        print(f"  FAILED {shot_id}: {outcome.get('error')}")
+    return 1 if failed else 0
+
+
 def run_site(args: argparse.Namespace) -> int:
     path = site_builder.build()
     print(f"Wrote {path.relative_to(ROOT)}")
@@ -256,6 +301,16 @@ def main() -> int:
     gen.add_argument("--voice-only", action="store_true", help="Only make the spoken lines.")
     gen.add_argument("--skip-voice", action="store_true", help="Only make frames and clips.")
     gen.set_defaults(run=run_gen)
+
+    kaggle = commands.add_parser("kaggle", help="Generate clips on Kaggle's free GPUs.")
+    kaggle_commands = kaggle.add_subparsers(dest="kaggle_command", required=True)
+    k_start = kaggle_commands.add_parser("start", help="Start generating clips for a script.")
+    k_start.add_argument("folder", type=Path)
+    k_start.add_argument("shots", nargs="*", help="Shot ids; every shot without a clip if omitted.")
+    k_start.set_defaults(run=run_kaggle_start)
+    k_collect = kaggle_commands.add_parser("collect", help="Download the clips once the run finishes.")
+    k_collect.add_argument("folder", type=Path)
+    k_collect.set_defaults(run=run_kaggle_collect)
 
     site = commands.add_parser("site", help="Build the web view of scripts, series and trends.")
     site.set_defaults(run=run_site)
