@@ -106,10 +106,16 @@ uv run pytest
 anything: for each shot it creates a still first frame, then animates it,
 using public Hugging Face Spaces, and saves `clips/S1.mp4` and so on, ready
 for `assemble`. Limits: clips are silent, at most 5 seconds, and the free GPU
-allowance covers only a few clips a day. It needs your Hugging Face token as
-the `HF_TOKEN` environment variable; without one the shared anonymous
-allowance is usually already used up. The command is tested with stand-ins;
-no real clip has been generated with it yet.
+allowance covers only a few clips a day. Clips come out at 480x832 and are
+scaled up when assembled.
+
+It needs your Hugging Face token. In a Claude cloud session, save the token as
+a network secret for the two Space hosts (`mcp-tools-qwen-image-fast.hf.space`
+and `zerogpu-aoti-wan2-2-fp8da-aoti-faster.hf.space`); on your own computer,
+set the `HF_TOKEN` environment variable. Without a token the shared anonymous
+allowance is usually already used up. The first frame and the clip are
+generated from the same shot prompt, so a character can look slightly
+different from shot to shot.
 
 ## Posting
 
