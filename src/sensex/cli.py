@@ -1,4 +1,4 @@
-"""Command line: `sensex trends`, `sensex check`, `sensex render`."""
+"""Command line: `sensex trends`, `sensex check`, `sensex render`, `sensex clips`."""
 
 import argparse
 import json
@@ -8,6 +8,8 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
+from sensex.clips import analyze as clip_analyze
+from sensex.clips import cut as clip_cut
 from sensex.config import ROOT, load_channel, load_tools
 from sensex.script.package import ScriptPackage, budget, check
 from sensex.script.render import render
@@ -90,6 +92,51 @@ def run_render(args: argparse.Namespace) -> int:
     return 0
 
 
+def _clip_dir(video: Path) -> Path:
+    return ROOT / "clips" / video.stem
+
+
+def run_clips_find(args: argparse.Namespace) -> int:
+    if not args.video.exists():
+        print(f"No such video: {args.video}")
+        return 1
+    print("Measuring audio, scene cuts and speech. Long videos take a while.", file=sys.stderr)
+    analysis = clip_analyze.analyze_video(args.video, args.model, args.min, args.max)
+    out_dir = _clip_dir(args.video)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / "analysis.json"
+    path.write_text(json.dumps(analysis, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"{analysis['duration_seconds']:g}s video, speech: {'yes' if analysis['has_speech'] else 'no'}, "
+          f"{analysis['scene_cuts']} scene cuts, {len(analysis['candidates'])} candidate moments.")
+    for row in analysis["candidates"]:
+        print(f"  {row['start']:>8.1f}-{row['end']:<8.1f} score {row['score']:>5}  {row['text'][:80]}")
+    print(f"Wrote {path.relative_to(ROOT)}")
+    return 0
+
+
+def run_clips_cut(args: argparse.Namespace) -> int:
+    try:
+        plan = clip_cut.ClipPlan.model_validate_json(args.plan.read_text(encoding="utf-8"))
+    except ValidationError as error:
+        print(f"{args.plan} is not a valid clip plan:")
+        for issue in error.errors():
+            print(f"  ERROR {'.'.join(str(part) for part in issue['loc'])}: {issue['msg']}")
+        return 1
+    out_dir = _clip_dir(args.video)
+    analysis_path = out_dir / "analysis.json"
+    transcript = []
+    if analysis_path.exists():
+        transcript = json.loads(analysis_path.read_text(encoding="utf-8"))["transcript"]
+    outputs = {}
+    for clip in plan.clips:
+        outputs[clip.id] = clip_cut.cut_clip(args.video, clip, transcript, out_dir)
+        print(f"Cut {outputs[clip.id].relative_to(ROOT)}")
+    sheet = out_dir / "review.md"
+    sheet.write_text(clip_cut.review_sheet(plan, outputs), encoding="utf-8")
+    print(f"Wrote {sheet.relative_to(ROOT)}. Nothing has been posted.")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(prog="sensex", description="Trend research and AI video scripts.")
     commands = parser.add_subparsers(dest="command", required=True)
@@ -103,6 +150,19 @@ def main() -> int:
         command = commands.add_parser(name, help=text)
         command.add_argument("package", type=Path)
         command.set_defaults(run=run)
+
+    clips = commands.add_parser("clips", help="Find and cut short clips from a video you own.")
+    clip_commands = clips.add_subparsers(dest="clip_command", required=True)
+    find = clip_commands.add_parser("find", help="Shortlist the best moments in a video.")
+    find.add_argument("video", type=Path)
+    find.add_argument("--model", default="small", help="Speech model: tiny, base, small, medium.")
+    find.add_argument("--min", type=float, default=20.0, help="Shortest clip in seconds.")
+    find.add_argument("--max", type=float, default=60.0, help="Longest clip in seconds.")
+    find.set_defaults(run=run_clips_find)
+    cut = clip_commands.add_parser("cut", help="Cut the clips listed in a plan file.")
+    cut.add_argument("video", type=Path)
+    cut.add_argument("plan", type=Path)
+    cut.set_defaults(run=run_clips_cut)
 
     args = parser.parse_args()
     return args.run(args)

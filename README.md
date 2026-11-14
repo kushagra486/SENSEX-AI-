@@ -17,6 +17,10 @@ Open this folder in Claude Code and ask in plain words:
   `scripts/<date>-<name>/script.md`.
 - **"Write the next episode of <series>"** continues a series with the same
   characters.
+- **"Cut clips from media/<file>"** finds the best moments in a video you own,
+  and cuts them into vertical 1080x1920 clips with captions in
+  `clips/<name>/`, with a review sheet. Only use footage you made or have
+  permission to repost.
 
 Each `script.md` contains the story, character sheets with reference-image
 prompts, every shot as a paste-ready prompt tagged with the tool to use, an
@@ -47,10 +51,13 @@ Every script is checked before it is rendered:
 uv run sensex trends [--window week|month]
 uv run sensex check scripts/<folder>/package.json
 uv run sensex render scripts/<folder>/package.json
+uv run sensex clips find media/<file> [--min 20 --max 60]
+uv run sensex clips cut media/<file> clips/<name>/plan.json
 uv run pytest
 ```
 
-## Not built yet
+## Posting
 
-Cutting the best moments out of a video you provide and posting the clips to
-Shorts and Reels.
+Clips are never posted automatically. After you approve a clip, posting goes
+through Metricool, which needs your Instagram and YouTube accounts connected
+there. Until then, upload the mp4 files yourself.

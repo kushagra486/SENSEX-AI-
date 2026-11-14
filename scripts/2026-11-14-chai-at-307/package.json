@@ -1,0 +1,161 @@
+{
+  "format": "series_episode",
+  "title": "Chai at 3:07, Ep 1: The Stall That Wasn't There",
+  "logline": "A tea stall appears on a mountain highway at 3:07 every night. Everyone who stops there is about to die on the road, and tonight it's Kabir's turn.",
+  "platform": "YouTube Shorts and Instagram Reels",
+  "aspect_ratio": "9:16",
+  "target_runtime_seconds": 47,
+  "trend_basis": [
+    "Local horror tied to a real kind of place: haunted highway stories (811K) and festival ghost stories (4.5M) lead this week's scan",
+    "Series labelling and cliffhanger titles outperform the scan median",
+    "Micro-dramas of about a minute are found through feeds; few horror channels use that format"
+  ],
+  "original_twist": "The haunted stall is the only safe place on the road. Its ghost is trying to save the living, and each episode Kabir must keep one doomed stranger from driving away before 3:08.",
+  "series": {
+    "title": "Chai at 3:07",
+    "episode_number": 1,
+    "season_arc": "Kabir learns why the stall chose him, and who Noor was before the road took her.",
+    "previously": "",
+    "cliffhanger": "Kabir's own truck drives past the stall with Kabir at the wheel, heading for the broken bridge."
+  },
+  "characters": [
+    {
+      "id": "kabir",
+      "name": "Kabir",
+      "role": "protagonist",
+      "archetype": "weary sceptic",
+      "personality": "Gruff, practical, believes in nothing he cannot repair, quietly grieving",
+      "voice": "Deep, tired male voice, Hindi-accented English, speaks slowly",
+      "visual_block": "Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt",
+      "reference_image_prompt": "Character reference sheet, full body, front and three-quarter view, plain grey background, cinematic realism, soft even light. Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt."
+    },
+    {
+      "id": "noor",
+      "name": "Noor",
+      "role": "guide",
+      "archetype": "gentle ghost",
+      "personality": "Calm, kind, speaks as if she has said this many times, never blinks at danger",
+      "voice": "Soft young female voice, unhurried, slight echo",
+      "visual_block": "Noor, a 20-year-old Indian woman with a long single black braid, a small silver nose stud, pale grey eyes, wearing a dark green salwar kameez and a mustard yellow shawl",
+      "reference_image_prompt": "Character reference sheet, full body, front and three-quarter view, plain grey background, cinematic realism, soft even light. Noor, a 20-year-old Indian woman with a long single black braid, a small silver nose stud, pale grey eyes, wearing a dark green salwar kameez and a mustard yellow shawl."
+    }
+  ],
+  "story": {
+    "opening_hook": "A dashboard clock flips to 3:07 and a lit tea stall appears in the fog where there was only cliff a second ago.",
+    "acts": [
+      {
+        "name": "Hook",
+        "summary": "The stall appears out of nothing at 3:07."
+      },
+      {
+        "name": "Warning",
+        "summary": "Noor already has Kabir's tea poured and tells him not to leave before 3:08."
+      },
+      {
+        "name": "Proof",
+        "summary": "He laughs it off, walks back toward his truck, and sees it drive past with himself inside."
+      }
+    ],
+    "ending": "Kabir stands frozen at the stall holding the glass as his own truck's tail lights vanish toward the broken bridge. Noor says only: 'Now you believe me.'"
+  },
+  "shots": [
+    {
+      "id": "S1",
+      "act": "Hook",
+      "duration_seconds": 3,
+      "tool": "dreamina",
+      "characters": [],
+      "prompt": "Vertical 9:16, cinematic realism, film grain, night on a foggy Himalayan mountain highway, cold blue moonlight with warm orange lantern glow. Close-up of a truck dashboard clock changing from 3:06 to 3:07, then through the windscreen a small tin-roofed roadside tea stall with a single lantern fades into existence in the fog at the cliff edge. Static shot, slight rack focus from clock to stall.",
+      "sound": "Engine idle, one deep bell note as the clock changes",
+      "on_screen_text": "It only appears at 3:07 AM.",
+      "transition": "cold open"
+    },
+    {
+      "id": "S2",
+      "act": "Hook",
+      "duration_seconds": 6,
+      "tool": "dreamina",
+      "characters": [
+        "kabir"
+      ],
+      "prompt": "Vertical 9:16, cinematic realism, film grain, night on a foggy Himalayan mountain highway, cold blue moonlight with warm orange lantern glow. Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt climbs down from the cab of a painted Indian cargo truck and walks warily toward a small tin-roofed roadside tea stall lit by a single lantern. Wide shot from behind him, slow push forward, fog curling around his boots.",
+      "sound": "Boots on gravel, wind",
+      "voiceover": "Kabir: Twenty years on this road. There was never a stall here."
+    },
+    {
+      "id": "S3",
+      "act": "Warning",
+      "duration_seconds": 8,
+      "tool": "veo",
+      "characters": [
+        "noor"
+      ],
+      "prompt": "Vertical 9:16, cinematic realism, film grain, night on a foggy Himalayan mountain highway, cold blue moonlight with warm orange lantern glow. Medium close-up of Noor, a 20-year-old Indian woman with a long single black braid, a small silver nose stud, pale grey eyes, wearing a dark green salwar kameez and a mustard yellow shawl standing behind the wooden counter of a tin-roofed tea stall, steam rising from a kettle. She slides a glass of chai forward without looking down and says softly: \"Your tea, Kabir. Two sugars. Do not leave before 3:08.\" Her face is calm, lantern light on one side.",
+      "dialogue": "Noor: Your tea, Kabir. Two sugars. Do not leave before 3:08.",
+      "sound": "Kettle hiss, distant wind"
+    },
+    {
+      "id": "S4",
+      "act": "Warning",
+      "duration_seconds": 8,
+      "tool": "veo",
+      "characters": [
+        "kabir"
+      ],
+      "prompt": "Vertical 9:16, cinematic realism, film grain, night on a foggy Himalayan mountain highway, cold blue moonlight with warm orange lantern glow. Medium close-up of Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt at the counter of a tin-roofed tea stall, holding a small glass of chai. He frowns, then gives a short disbelieving laugh and says: \"How do you know my name, girl? I have a delivery to make.\" He turns his head toward the road.",
+      "dialogue": "Kabir: How do you know my name, girl? I have a delivery to make.",
+      "sound": "Low drone begins"
+    },
+    {
+      "id": "S5",
+      "act": "Proof",
+      "duration_seconds": 8,
+      "tool": "dreamina",
+      "characters": [
+        "kabir"
+      ],
+      "prompt": "Vertical 9:16, cinematic realism, film grain, night on a foggy Himalayan mountain highway, cold blue moonlight with warm orange lantern glow. Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt steps away from a tin-roofed tea stall toward the road, glass of chai in hand, then stops dead as bright headlights sweep across his face from the left. Side tracking shot, the headlights flaring through fog.",
+      "sound": "A truck horn approaching, drone rising",
+      "transition": "cut on the headlight flare"
+    },
+    {
+      "id": "S6",
+      "act": "Proof",
+      "duration_seconds": 8,
+      "tool": "dreamina",
+      "characters": [
+        "kabir"
+      ],
+      "prompt": "Vertical 9:16, cinematic realism, film grain, night on a foggy Himalayan mountain highway, cold blue moonlight with warm orange lantern glow. A painted Indian cargo truck roars past very close. Through its side window, clearly visible at the steering wheel, is Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt, staring straight ahead, unaware. Slow-motion pan following the cab as it passes, then tail lights disappearing into fog toward a broken bridge sign.",
+      "sound": "Truck roar in slow motion, then sudden silence",
+      "on_screen_text": "That's... me?"
+    },
+    {
+      "id": "S7",
+      "act": "Proof",
+      "duration_seconds": 6,
+      "tool": "veo",
+      "characters": [
+        "noor",
+        "kabir"
+      ],
+      "prompt": "Vertical 9:16, cinematic realism, film grain, night on a foggy Himalayan mountain highway, cold blue moonlight with warm orange lantern glow. Two-shot at a tin-roofed tea stall. In the foreground, out of focus, Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt stands frozen with his back to camera, glass of chai trembling in his hand. Behind the counter in sharp focus, Noor, a 20-year-old Indian woman with a long single black braid, a small silver nose stud, pale grey eyes, wearing a dark green salwar kameez and a mustard yellow shawl looks at him and says quietly: \"Now you believe me.\" The lantern flickers.",
+      "dialogue": "Noor: Now you believe me.",
+      "sound": "Lantern flicker, a distant crash, silence",
+      "on_screen_text": "Ep 2: who is driving?",
+      "transition": "hard cut to black"
+    }
+  ],
+  "posting": {
+    "title": "He stopped for chai at 3:07 AM... then saw HIMSELF drive past | Chai at 3:07, Part 1",
+    "caption": "The stall was never there before. Would you have stayed till 3:08? Part 2 tomorrow.",
+    "hashtags": [
+      "#horrorstory",
+      "#aistory",
+      "#microdrama",
+      "#chaiat307",
+      "#shorts"
+    ],
+    "thumbnail_prompt": "Vertical thumbnail. Vertical 9:16, cinematic realism, film grain, night on a foggy Himalayan mountain highway, cold blue moonlight with warm orange lantern glow. Kabir, a 45-year-old Indian truck driver with a thick grey-streaked beard, a deep crease between his brows, wearing a faded maroon turban, a brown wool shawl over a khaki shirt in the foreground, terrified, lit by headlights, a glowing tin-roofed tea stall behind him with the silhouette of a young woman. Clear dark space at the top for title text."
+  }
+}
