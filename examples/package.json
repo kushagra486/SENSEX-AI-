@@ -1,0 +1,144 @@
+{
+  "format": "series_episode",
+  "title": "The Last Delivery, Ep 1: Wrong Address",
+  "logline": "A broke courier and a glitchy delivery robot open a parcel addressed to someone who died ten years ago.",
+  "platform": "YouTube Shorts",
+  "aspect_ratio": "9:16",
+  "target_runtime_seconds": 42,
+  "trend_basis": [
+    "Hidden-identity reveals dominate top AI drama titles",
+    "Episodic shorts ending on a cliffhanger get repeat viewers"
+  ],
+  "original_twist": "The secret identity belongs to the parcel, not a person: each episode's package rewrites what Mira knows about her own family.",
+  "series": {
+    "title": "The Last Delivery",
+    "episode_number": 1,
+    "season_arc": "Mira traces a chain of impossible parcels back to her missing mother.",
+    "previously": "",
+    "cliffhanger": "The parcel contains Mira's own childhood photo, dated next week."
+  },
+  "characters": [
+    {
+      "id": "mira",
+      "name": "Mira",
+      "role": "protagonist",
+      "archetype": "reluctant hero",
+      "personality": "Sarcastic, stubborn, hides fear behind jokes",
+      "voice": "Young woman, dry and quick, light Mumbai accent",
+      "visual_block": "Mira, a 19-year-old Indian woman with a short black bob haircut, a thin scar through her left eyebrow, wearing an oversized yellow raincoat over a grey hoodie",
+      "reference_image_prompt": "Full-body character sheet, front and side view, neutral grey background, cinematic realism. Mira, a 19-year-old Indian woman with a short black bob haircut, a thin scar through her left eyebrow, wearing an oversized yellow raincoat over a grey hoodie."
+    },
+    {
+      "id": "tik",
+      "name": "Tik",
+      "role": "sidekick",
+      "archetype": "loyal fool",
+      "personality": "Literal-minded, cheerful, terrible timing",
+      "voice": "Small chirpy synthetic voice",
+      "visual_block": "Tik, a knee-high rusty orange delivery robot with one cracked round blue eye-lens and a dented boxy body on two small wheels",
+      "reference_image_prompt": "Full-body character sheet, front and side view, neutral grey background, cinematic realism. Tik, a knee-high rusty orange delivery robot with one cracked round blue eye-lens and a dented boxy body on two small wheels."
+    }
+  ],
+  "story": {
+    "opening_hook": "A parcel on a rainy doorstep starts ticking, with the label reading a name crossed out in red.",
+    "acts": [
+      {
+        "name": "Hook",
+        "summary": "The ticking parcel and the dead man's name."
+      },
+      {
+        "name": "Build",
+        "summary": "Mira argues with Tik about opening it; the house has been empty for years."
+      },
+      {
+        "name": "Turn",
+        "summary": "She opens it."
+      }
+    ],
+    "ending": "Mira stares at a photo of herself as a child, stamped with next week's date, as the house lights switch on behind her."
+  },
+  "shots": [
+    {
+      "id": "S1",
+      "act": "Hook",
+      "duration_seconds": 4,
+      "tool": "dreamina",
+      "characters": [],
+      "prompt": "Vertical 9:16, cinematic realism, night, heavy rain. Extreme close-up of a brown paper parcel on a wet stone doorstep, a shipping label with a name crossed out in red ink, the parcel trembling slightly. Slow push-in, cold blue streetlight.",
+      "sound": "Rain, a faint mechanical ticking",
+      "on_screen_text": "This parcel is for a dead man.",
+      "transition": "cold open"
+    },
+    {
+      "id": "S2",
+      "act": "Build",
+      "duration_seconds": 8,
+      "tool": "veo",
+      "characters": [
+        "mira",
+        "tik"
+      ],
+      "prompt": "Vertical 9:16, cinematic realism, night, heavy rain. Mira, a 19-year-old Indian woman with a short black bob haircut, a thin scar through her left eyebrow, wearing an oversized yellow raincoat over a grey hoodie crouches by a parcel on the doorstep of a dark abandoned house. Beside her is Tik, a knee-high rusty orange delivery robot with one cracked round blue eye-lens and a dented boxy body on two small wheels. She says, annoyed: \"Nobody has lived here for ten years, Tik.\" The robot's lens flickers. Medium two-shot, handheld, blue streetlight.",
+      "dialogue": "Mira: Nobody has lived here for ten years, Tik.",
+      "sound": "Rain, ticking continues"
+    },
+    {
+      "id": "S3",
+      "act": "Build",
+      "duration_seconds": 8,
+      "tool": "veo",
+      "characters": [
+        "tik"
+      ],
+      "prompt": "Vertical 9:16, cinematic realism, night, heavy rain. Close-up of Tik, a knee-high rusty orange delivery robot with one cracked round blue eye-lens and a dented boxy body on two small wheels, tilting its body upward. It says in a chirpy synthetic voice: \"Delivery must be completed. Recipient is inside.\" Rain streaks down its lens, a window glows faintly behind it.",
+      "dialogue": "Tik: Delivery must be completed. Recipient is inside."
+    },
+    {
+      "id": "S4",
+      "act": "Build",
+      "duration_seconds": 6,
+      "tool": "dreamina",
+      "characters": [
+        "mira"
+      ],
+      "prompt": "Vertical 9:16, cinematic realism, night, heavy rain. Mira, a 19-year-old Indian woman with a short black bob haircut, a thin scar through her left eyebrow, wearing an oversized yellow raincoat over a grey hoodie looks up slowly at a dark upstairs window of the abandoned house, fear replacing her smirk. Low angle, slow tilt up from her face to the window.",
+      "sound": "Ticking stops abruptly",
+      "transition": "cut on the silence"
+    },
+    {
+      "id": "S5",
+      "act": "Turn",
+      "duration_seconds": 8,
+      "tool": "dreamina",
+      "characters": [
+        "mira"
+      ],
+      "prompt": "Vertical 9:16, cinematic realism, night, heavy rain. Mira, a 19-year-old Indian woman with a short black bob haircut, a thin scar through her left eyebrow, wearing an oversized yellow raincoat over a grey hoodie tears open a brown paper parcel with shaking hands and pulls out a faded photograph. Over-the-shoulder shot, shallow focus on her hands.",
+      "sound": "Paper tearing, low drone rising"
+    },
+    {
+      "id": "S6",
+      "act": "Turn",
+      "duration_seconds": 8,
+      "tool": "dreamina",
+      "characters": [
+        "mira"
+      ],
+      "prompt": "Vertical 9:16, cinematic realism, night, heavy rain. Close-up of a faded photograph of a small girl in a yellow raincoat, a date stamp in the corner, held in wet fingers. Rack focus to Mira, a 19-year-old Indian woman with a short black bob haircut, a thin scar through her left eyebrow, wearing an oversized yellow raincoat over a grey hoodie, her face frozen in shock, as warm lights switch on in the house behind her.",
+      "voiceover": "Mira: That's me. And that date... is next week.",
+      "on_screen_text": "Ep 2 tomorrow",
+      "transition": "hard cut to black"
+    }
+  ],
+  "posting": {
+    "title": "She delivered a parcel to a dead man... then opened it | The Last Delivery Ep 1",
+    "caption": "Would you open it? Ep 2 drops tomorrow.",
+    "hashtags": [
+      "#aistory",
+      "#shortdrama",
+      "#thelastdelivery",
+      "#aiseries"
+    ],
+    "thumbnail_prompt": "Vertical thumbnail, cinematic realism, rain at night. Mira, a 19-year-old Indian woman with a short black bob haircut, a thin scar through her left eyebrow, wearing an oversized yellow raincoat over a grey hoodie holding a glowing parcel, terrified, an abandoned house with one lit window behind her. Bold empty space at the top for text."
+  }
+}

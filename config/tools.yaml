@@ -1,0 +1,27 @@
+# Video tools the scripts are written for, and what each can do per day.
+# The numbers are approximate free-tier figures from November 2026 review sites.
+# Check each tool's own page and correct them here; the budget maths follows this file.
+max_days_per_video: 7     # a script needing more days of credits than this fails the check
+
+tools:
+  veo:
+    label: "Veo (Gemini Pro)"
+    max_clip_seconds: 8
+    credits_per_clip: 1
+    daily_credits: 3
+    has_audio: true
+    reference_images: true
+  dreamina:
+    label: "Dreamina / Seedance (free)"
+    max_clip_seconds: 10
+    credits_per_clip: 20
+    daily_credits: 100
+    has_audio: false
+    reference_images: true
+  flow:
+    label: "Google Flow (free)"
+    max_clip_seconds: 8
+    credits_per_clip: 10
+    daily_credits: 50
+    has_audio: true
+    reference_images: true

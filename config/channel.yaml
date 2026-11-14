@@ -1,0 +1,22 @@
+# Who the videos are for. Edit this first: every trend report and script reads it.
+channel:
+  name: "My Channel"
+  niche: "AI-generated story videos"
+  language: "English"
+  region: "IN"            # two-letter country code, used for Google trending searches
+  audience: "16-30, watches short dramas and gaming clips on phone"
+  platforms: ["YouTube Shorts", "Instagram Reels", "YouTube"]
+
+# What the trend scan searches YouTube for. Add or remove freely.
+queries:
+  - "ai short film"
+  - "ai story"
+  - "ai drama series"
+  - "ai animation story"
+  - "ai generated gameplay"
+  - "ai horror story"
+  - "ai video viral"
+
+scan:
+  window: "week"          # week or month
+  results_per_query: 25
