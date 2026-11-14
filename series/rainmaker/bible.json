@@ -1,0 +1,34 @@
+{
+  "title": "Rainmaker",
+  "season_arc": "Tara's machine makes her village the first place in decades with free water, and the company that owns the rain comes to take it back.",
+  "characters": [
+    {
+      "id": "tara",
+      "name": "Tara",
+      "role": "protagonist",
+      "archetype": "stubborn inventor",
+      "personality": "Blunt, fearless, counts her failures, loves her grandfather more than she says",
+      "voice": "Clear, quick young girl's voice with dry humour",
+      "visual_block": "Tara, a 13-year-old Indian girl with two short messy braids, a smudge of dust on her cheek, sharp curious eyes, wearing a patched indigo kurta, an orange scarf around her neck and welding goggles pushed up on her forehead",
+      "reference_image_prompt": "Character reference photo, full body, front and three-quarter view, plain light grey background, realistic, soft even light. Tara, a 13-year-old Indian girl with two short messy braids, a smudge of dust on her cheek, sharp curious eyes, wearing a patched indigo kurta, an orange scarf around her neck and welding goggles pushed up on her forehead."
+    },
+    {
+      "id": "dadu",
+      "name": "Dadu",
+      "role": "guardian",
+      "archetype": "cautious elder",
+      "personality": "Gentle, proud, has learned to survive by keeping his head down",
+      "voice": "Soft, gravelly old man's voice",
+      "visual_block": "Dadu, a 70-year-old Indian man with a white beard, a faded red Rajasthani turban, deep wrinkles, wearing a cream cotton kurta and a brass token on a cord around his neck",
+      "reference_image_prompt": "Character reference photo, full body, front and three-quarter view, plain light grey background, realistic, soft even light. Dadu, a 70-year-old Indian man with a white beard, a faded red Rajasthani turban, deep wrinkles, wearing a cream cotton kurta and a brass token on a cord around his neck."
+    }
+  ],
+  "episodes": [
+    {
+      "number": 1,
+      "title": "Rainmaker, Ep 1: Attempt 41",
+      "summary": "In 2099 Rajasthan, where a company sells every drop of water, a 13-year-old girl builds a machine from scrap that makes it rain, and the company notices.",
+      "cliffhanger": "Company tanker drones turn toward the village while Tara refuses to hide the machine."
+    }
+  ]
+}

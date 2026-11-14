@@ -1,0 +1,228 @@
+{
+  "format": "series_episode",
+  "title": "Rainmaker, Ep 1: Attempt 41",
+  "logline": "In 2099 Rajasthan, where a company sells every drop of water, a 13-year-old girl builds a machine from scrap that makes it rain, and the company notices.",
+  "platform": "YouTube Shorts and Instagram Reels",
+  "aspect_ratio": "9:16",
+  "target_runtime_seconds": 62,
+  "trend_basis": [
+    "A 'world after' science-fiction short was the biggest English-language hit in this week's scan (3.0M views), from a single video",
+    "Poor-family-changes-its-fate stories recur among the top Hindi results (1.1M, 535K)",
+    "Episode numbering appears in 22% of short videos"
+  ],
+  "original_twist": "Indian village science fiction with no chosen one and no aliens: the hero is a scrapyard kid, the villain is a water bill, and every episode her rain costs the village something.",
+  "series": {
+    "title": "Rainmaker",
+    "episode_number": 1,
+    "season_arc": "Tara's machine makes her village the first place in decades with free water, and the company that owns the rain comes to take it back.",
+    "previously": "",
+    "cliffhanger": "Company tanker drones turn toward the village while Tara refuses to hide the machine."
+  },
+  "characters": [
+    {
+      "id": "tara",
+      "name": "Tara",
+      "role": "protagonist",
+      "archetype": "stubborn inventor",
+      "personality": "Blunt, fearless, counts her failures, loves her grandfather more than she says",
+      "voice": "Clear, quick young girl's voice with dry humour",
+      "visual_block": "Tara, a 13-year-old Indian girl with two short messy braids, a smudge of dust on her cheek, sharp curious eyes, wearing a patched indigo kurta, an orange scarf around her neck and welding goggles pushed up on her forehead",
+      "reference_image_prompt": "Character reference photo, full body, front and three-quarter view, plain light grey background, realistic, soft even light. Tara, a 13-year-old Indian girl with two short messy braids, a smudge of dust on her cheek, sharp curious eyes, wearing a patched indigo kurta, an orange scarf around her neck and welding goggles pushed up on her forehead."
+    },
+    {
+      "id": "dadu",
+      "name": "Dadu",
+      "role": "guardian",
+      "archetype": "cautious elder",
+      "personality": "Gentle, proud, has learned to survive by keeping his head down",
+      "voice": "Soft, gravelly old man's voice",
+      "visual_block": "Dadu, a 70-year-old Indian man with a white beard, a faded red Rajasthani turban, deep wrinkles, wearing a cream cotton kurta and a brass token on a cord around his neck",
+      "reference_image_prompt": "Character reference photo, full body, front and three-quarter view, plain light grey background, realistic, soft even light. Dadu, a 70-year-old Indian man with a white beard, a faded red Rajasthani turban, deep wrinkles, wearing a cream cotton kurta and a brass token on a cord around his neck."
+    }
+  ],
+  "story": {
+    "opening_hook": "A single drop of water hits cracked earth and a dozen hands reach for it.",
+    "hook_variants": [
+      "Open on Tara laughing in pouring rain, freeze, then text: 'This rain is illegal.'",
+      "Open on the black tanker drones turning toward the village, then cut to: 'Three minutes earlier.'"
+    ],
+    "acts": [
+      {
+        "name": "Hook",
+        "summary": "One drop, a dozen hands."
+      },
+      {
+        "name": "World",
+        "summary": "Dadu is refused water; Tara is building a machine and says she is making water, not stealing it."
+      },
+      {
+        "name": "Attempt",
+        "summary": "Attempt 41: the beam goes up and the sky stays empty."
+      },
+      {
+        "name": "Rain",
+        "summary": "A cloud blooms, and the village gets its first rain."
+      },
+      {
+        "name": "Price",
+        "summary": "Company drones turn toward the village."
+      }
+    ],
+    "ending": "Dadu begs Tara to hide the machine as the drones close in; she stands in the rain and stares at them."
+  },
+  "shots": [
+    {
+      "id": "S1",
+      "act": "Hook",
+      "duration_seconds": 3,
+      "tool": "kaggle",
+      "characters": [],
+      "prompt": "Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. Extreme close-up of a single drop of water falling onto cracked dry earth, and a dozen dusty hands reaching in from every side to touch the wet spot. Slow motion, top-down view.",
+      "sound": "One drop landing, a crowd gasping",
+      "on_screen_text": "2099. One drop of water costs a day's work.",
+      "transition": "cold open"
+    },
+    {
+      "id": "S2",
+      "act": "World",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [
+        "dadu"
+      ],
+      "prompt": "Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. Early morning. Dadu, a 70-year-old Indian man with a white beard, a faded red Rajasthani turban, deep wrinkles, wearing a cream cotton kurta and a brass token on a cord around his neck stands at the front of a long queue of villagers and holds his brass token up to a tall metal water-ration machine; a light on the machine turns red and he lowers his head. Medium shot from the side.",
+      "voiceover": "Tara: My grandfather has queued for water every morning of my life.",
+      "sound": "A harsh electronic buzz"
+    },
+    {
+      "id": "S3",
+      "act": "World",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [
+        "tara"
+      ],
+      "prompt": "Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. A rooftop workshop cluttered with scrap metal. Tara, a 13-year-old Indian girl with two short messy braids, a smudge of dust on her cheek, sharp curious eyes, wearing a patched indigo kurta, an orange scarf around her neck and welding goggles pushed up on her forehead solders a wire onto a waist-high homemade machine of brass pipes, copper coils and a small upturned satellite dish, wired to old car batteries, sparks lighting her face. Close-up, slow push-in.",
+      "voiceover": "Tara: I got tired of watching him beg a machine. So I built my own.",
+      "sound": "Soldering crackle, wind"
+    },
+    {
+      "id": "S4",
+      "act": "World",
+      "duration_seconds": 8,
+      "tool": "veo",
+      "characters": [
+        "dadu",
+        "tara"
+      ],
+      "prompt": "Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. A rooftop workshop cluttered with scrap metal. Dadu, a 70-year-old Indian man with a white beard, a faded red Rajasthani turban, deep wrinkles, wearing a cream cotton kurta and a brass token on a cord around his neck climbs onto the roof and stares at a waist-high homemade machine of brass pipes, copper coils and a small upturned satellite dish, wired to old car batteries. He says, frightened: \"Tara, the company jails people for stealing water.\" Tara, a 13-year-old Indian girl with two short messy braids, a smudge of dust on her cheek, sharp curious eyes, wearing a patched indigo kurta, an orange scarf around her neck and welding goggles pushed up on her forehead keeps working without looking up and answers calmly: \"I'm not stealing it, Dadu. I'm making it.\" Medium two-shot.",
+      "dialogue": "Dadu: Tara, the company jails people for stealing water. / Tara: I'm not stealing it, Dadu. I'm making it."
+    },
+    {
+      "id": "S5",
+      "act": "Attempt",
+      "duration_seconds": 4,
+      "tool": "kaggle",
+      "characters": [
+        "tara"
+      ],
+      "prompt": "Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. A rooftop workshop. Tara, a 13-year-old Indian girl with two short messy braids, a smudge of dust on her cheek, sharp curious eyes, wearing a patched indigo kurta, an orange scarf around her neck and welding goggles pushed up on her forehead pulls her welding goggles down over her eyes and throws a heavy iron lever with both hands; a blue electric arc jumps across copper coils beside her. Low angle.",
+      "sound": "A deep rising hum",
+      "on_screen_text": "Attempt 41"
+    },
+    {
+      "id": "S6",
+      "act": "Attempt",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [],
+      "prompt": "Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. A rooftop. The upturned dish of a waist-high homemade machine of brass pipes, copper coils and a small upturned satellite dish, wired to old car batteries fires a thin beam of pale blue light straight up into a cloudless white-hot sky, dust spiralling around it. Wide shot looking up from the roof.",
+      "sound": "The hum peaks, then cuts out"
+    },
+    {
+      "id": "S7",
+      "act": "Attempt",
+      "duration_seconds": 4,
+      "tool": "kaggle",
+      "characters": [
+        "tara"
+      ],
+      "prompt": "Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. A rooftop. Tara, a 13-year-old Indian girl with two short messy braids, a smudge of dust on her cheek, sharp curious eyes, wearing a patched indigo kurta, an orange scarf around her neck and welding goggles pushed up on her forehead stares up at an empty sky, then slowly pushes her goggles back onto her forehead as her shoulders drop. Close-up on her face.",
+      "voiceover": "Tara: Forty failures. I knew what an empty sky looked like.",
+      "sound": "Silence, a faint wind"
+    },
+    {
+      "id": "S8",
+      "act": "Rain",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [],
+      "prompt": "Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. A single dark cloud blooms in the empty sky and spreads fast over the village, its shadow sliding across sandstone rooftops and rusted solar panels. Wide aerial shot.",
+      "sound": "Low thunder rolling in"
+    },
+    {
+      "id": "S9",
+      "act": "Rain",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [
+        "dadu"
+      ],
+      "prompt": "Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. A narrow village lane, sudden grey light. Dadu, a 70-year-old Indian man with a white beard, a faded red Rajasthani turban, deep wrinkles, wearing a cream cotton kurta and a brass token on a cord around his neck holds out his open palm as the first heavy raindrops hit it, then lifts his face to the sky, eyes wet. Close-up on his hand, tilting up to his face.",
+      "sound": "The first raindrops on dust"
+    },
+    {
+      "id": "S10",
+      "act": "Rain",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [
+        "tara"
+      ],
+      "prompt": "Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. Heavy rain pouring. Tara, a 13-year-old Indian girl with two short messy braids, a smudge of dust on her cheek, sharp curious eyes, wearing a patched indigo kurta, an orange scarf around her neck and welding goggles pushed up on her forehead stands on the rooftop laughing with her arms spread wide, soaked, while villagers dance in the flooded lane below. Low angle with the crowd behind her.",
+      "voiceover": "Tara: For three minutes, it was the best day our village ever had.",
+      "sound": "Rain, cheering, a dhol drum starting"
+    },
+    {
+      "id": "S11",
+      "act": "Price",
+      "duration_seconds": 5,
+      "tool": "kaggle",
+      "characters": [],
+      "prompt": "Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. Heavy rain. On the horizon three huge black tanker drones with red warning lights turn in the air and fly toward the village through the downpour. Long-lens shot from a rooftop, raindrops on the lens.",
+      "sound": "Cheering fades under a mechanical drone",
+      "on_screen_text": "The company owns the rain."
+    },
+    {
+      "id": "S12",
+      "act": "Price",
+      "duration_seconds": 8,
+      "tool": "veo",
+      "characters": [
+        "dadu",
+        "tara"
+      ],
+      "prompt": "Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. Heavy rain on a rooftop. Dadu, a 70-year-old Indian man with a white beard, a faded red Rajasthani turban, deep wrinkles, wearing a cream cotton kurta and a brass token on a cord around his neck grips the shoulders of Tara, a 13-year-old Indian girl with two short messy braids, a smudge of dust on her cheek, sharp curious eyes, wearing a patched indigo kurta, an orange scarf around her neck and welding goggles pushed up on her forehead and shouts over the storm: \"They saw the cloud. Hide the machine. Now!\" She does not move; she is staring past him at red lights approaching in the sky. Close two-shot, handheld.",
+      "dialogue": "Dadu: They saw the cloud. Hide the machine. Now!",
+      "on_screen_text": "Episode 2 tomorrow",
+      "sound": "Thunder, drone engines closing in",
+      "transition": "hard cut to black"
+    }
+  ],
+  "posting": {
+    "title": "A 13-year-old made it RAIN in 2099... then the drones came | Rainmaker Part 1",
+    "title_variants": [
+      "In 2099 rain is illegal. She built it from scrap anyway. | Rainmaker Part 1",
+      "Her grandfather begged a machine for water. So she built a better one. | Rainmaker Part 1"
+    ],
+    "caption": "Attempt 41 worked. Now the company knows. Part 2 tomorrow.",
+    "hashtags": [
+      "#aistory",
+      "#scifi",
+      "#rainmaker",
+      "#shortfilm",
+      "#shorts"
+    ],
+    "thumbnail_prompt": "Vertical thumbnail. Vertical 9:16, cinematic realistic science fiction, the year 2099, a drought-cracked desert village in Rajasthan with sandstone houses, rusted solar panels and a dry stepwell, harsh golden light, dust hanging in the air. Tara, a 13-year-old Indian girl with two short messy braids, a smudge of dust on her cheek, sharp curious eyes, wearing a patched indigo kurta, an orange scarf around her neck and welding goggles pushed up on her forehead standing on a rooftop in pouring rain looking up, with three black tanker drones with red lights in the stormy sky behind her. Clear dark space at the top for title text."
+  }
+}
